@@ -68,6 +68,9 @@ public:
 	// game file settings
 	char			game_file_patching;
 
+	// resolution settings
+	int			resolution;
+
 	// locale settings
 	char			locale[LOCALE_LEN+1];
 

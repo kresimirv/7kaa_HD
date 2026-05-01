@@ -378,7 +378,7 @@ void Sys::disp_button()
 {
 	vga.use_back();
 
-	button_menu.paint( 720, 6, "MENU-U", "MENU-D" );
+	button_menu.paint( VGA_WIDTH - 80, 6, "MENU-U", "MENU-D" );
 	button_menu.set_help_code( "GAMEMENU" );
 
 	vga.use_front();
@@ -686,7 +686,7 @@ void Sys::update_view()
 		{
 			vga.use_back();
 /*
-			char* germanStr = "d ü    ä    ß    ö    Ä    Ü    Ö";
+			char* germanStr = "d Ã¼    Ã¤    ÃŸ    Ã¶    Ã„    Ãœ    Ã–";
 
 			vga_back.bar( ZOOM_X1, ZOOM_Y1, ZOOM_X1+300, ZOOM_Y1+150, VGA_LIGHT_GREEN );
 

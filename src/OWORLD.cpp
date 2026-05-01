@@ -131,7 +131,7 @@ void World::assign_map()
 	//------------- assign map -------------//
 
    map_matrix-> assign_map(loc_matrix, max_x_loc, max_y_loc );
-	zoom_matrix->assign_map(loc_matrix, max_x_loc, max_y_loc );
+   zoom_matrix->assign_map(loc_matrix, max_x_loc, max_y_loc );
 
    //-------- set the zoom area box on map matrix ------//
 

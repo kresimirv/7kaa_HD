@@ -187,12 +187,13 @@ void ImageRes::put_join(int x, int y, const char* imageName)
 // <VgaBuf*> vgaBuf 	  = the vga buffer for display
 // <int>	    x,y       = the location of the image
 // <char*>   imageName = name of the image
+// <int>	useStretch
 //
-void ImageRes::put_large(VgaBuf* vgaBuf, int x, int y, char* imageName)
+void ImageRes::put_large(VgaBuf* vgaBuf, int x, int y, char* imageName, int useStretch)
 {
 	int dataSize;
 
-	vgaBuf->put_large_bitmap( x, y, ResourceIdx::get_file(imageName, dataSize) );
+	vgaBuf->put_large_bitmap( x, y, ResourceIdx::get_file(imageName, dataSize), useStretch);
 }
 //---------- End of function ImageRes::put_large --------//
 

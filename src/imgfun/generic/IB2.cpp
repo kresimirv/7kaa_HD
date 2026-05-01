@@ -61,3 +61,35 @@ void IMGcall IMGblt2(char*imageBuf,int pitch,int x,int y,int bitmapWidth,int bit
 	}
 }
 //----------- END OF FUNCTION IMGblt2 ----------
+
+//----------- BEGIN OF FUNCTION IMGblt3 ------------
+void IMGcall IMGblt3(char*imageBuf, int pitch, int height, int x, int y, int bitmapWidth, int bitmapHeight, char*bitmapBuf)
+{
+	int destline = y * pitch + x;
+	int esi = 0;		// [Alex] NOTE: bitmapBuf is actually the RAW bitmap data, ignore the comments above!!
+	int destHeight = height;
+	int destWidth = pitch;
+	float scalewidth = ((float)bitmapWidth / destWidth);
+	float scaleHeight = ((float)bitmapHeight/ destHeight);
+
+	int row = 0;
+	for (int j = 0; j < destHeight; )
+	{
+		for (int i = 0; i < destWidth; ++i)
+		{
+			int lineIdx2 = scalewidth * i;
+			unsigned char color = ((unsigned char*)bitmapBuf)[esi + lineIdx2];
+			imageBuf[destline + i] = color;
+		}
+		int newRow = j * scaleHeight;
+		if (row != newRow)
+		{
+			row = newRow;
+			esi += bitmapWidth;
+		}
+		destline += pitch;
+		j++;
+
+	}
+}
+//----------- END OF FUNCTION IMGblt3 ----------

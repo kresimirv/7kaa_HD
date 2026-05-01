@@ -250,16 +250,9 @@ int GameFileArray::menu(int actionMode, int *recno)
 
 	//-------------------------------------//
 
-	if( game.game_mode==GAME_PREGAME )	  // called from the main menu, not in the game
-	{
-		menu_x1 = FILE_MAIN_MENU_X1;
-		menu_y1 = FILE_MAIN_MENU_Y1;
-	}
-	else
-	{
-		menu_x1 = FILE_IN_GAME_MENU_X1;
-		menu_y1 = FILE_IN_GAME_MENU_Y1;
-	}
+	// Save / Load game window - center of the screen
+	menu_x1 = (VGA_WIDTH - FILE_MENU_WIDTH) / 2;
+	menu_y1 = (VGA_HEIGHT - FILE_MENU_HEIGHT) / 2;
 
 	int x=menu_x1, y=menu_y1+17;
 

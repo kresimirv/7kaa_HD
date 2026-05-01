@@ -30,6 +30,7 @@
 #include <version.h>
 #include <FilePath.h>
 #include <ConfigAdv.h>
+#include <OCONFIG.h>
 
 DBGLOG_DEFAULT_CHANNEL(Vga);
 

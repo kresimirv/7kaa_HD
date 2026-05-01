@@ -273,6 +273,8 @@ void ConfigAdv::reset()
 
 	game_file_patching = 1;
 
+	resolution = 0;
+
 	locale[0] = 0;
 
 	mine_unlimited_reserve = 0;
@@ -514,6 +516,13 @@ int ConfigAdv::set(char *name, char *value)
 		{
 			return 0;
 		}
+	}
+	else if( !strcmp(name, "resolution") )
+	{
+		if( !read_int(value, &resolution) )
+			return 0;
+		if( CHECK_BOUND(resolution, 0, 2) )
+			return 0;
 	}
 	else if( !strcmp(name, "rebel_think_town_action") )
 	{

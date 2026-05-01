@@ -385,7 +385,7 @@ void VgaBuf::rest_area(char* saveScr, int releaseFlag)
 //
 //---------------------------------------------//
 
-void VgaBuf::put_large_bitmap(int x1, int y1, File* filePtr)
+void VgaBuf::put_large_bitmap(int x1, int y1, File* filePtr, int useStretch)
 {
 	if( filePtr == NULL )
 		return;
@@ -426,7 +426,7 @@ void VgaBuf::put_large_bitmap(int x1, int y1, File* filePtr)
 	int x2 = x1 + pictWidth  - 1;
 	int y2 = y1 + pictHeight - 1;
 
-	long pictSize = (long) pictWidth * pictHeight;
+	long pictSize = (long) x2 * y2;
 
 	err_when( x1>x2 || y1>y2 || x1<0 || y1<0 || x2>=VGA_WIDTH || y2>=VGA_HEIGHT );
 
@@ -439,7 +439,14 @@ void VgaBuf::put_large_bitmap(int x1, int y1, File* filePtr)
 		if( is_front )
 			mouse.hide_area( x1,y1,x2,y2 );  // if the mouse cursor is in that area, hide it
 
-		put_bitmap2( x1, y1, pictWidth, pictHeight, sys.common_data_buf );
+		if (useStretch)
+		{
+			put_bitmap2_s(x1, y1, pictWidth, pictHeight, sys.common_data_buf);
+		}
+		else
+		{
+			put_bitmap2(x1, y1, pictWidth, pictHeight, sys.common_data_buf);
+		}
 
 		if( is_front )
 			mouse.show_area();
@@ -459,7 +466,14 @@ void VgaBuf::put_large_bitmap(int x1, int y1, File* filePtr)
 			if( is_front )
 				mouse.hide_area( x1,y1,x2,ty );  // if the mouse cursor is in that area, hide it
 
-			put_bitmap2( x1, y1, pictWidth, ty-y1+1, sys.common_data_buf );
+			if (useStretch)
+			{
+				put_bitmap2_s(x1, y1, pictWidth, ty - y1 + 1, sys.common_data_buf);
+			}
+			else
+			{
+				put_bitmap2(x1, y1, pictWidth, ty - y1 + 1, sys.common_data_buf);
+			}
 
 			if( is_front )
 				mouse.show_area();

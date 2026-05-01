@@ -171,7 +171,7 @@ void LocaleRes::load(const char *locale)
 	if( i >= locale_count )
 	{
 		strcpy(lang, "??");
-		strcpy(codeset, "ISO-8859-1");
+		strcpy(codeset, "UTF-8");
 	}
 
 	String tocode(codeset);
@@ -182,7 +182,7 @@ void LocaleRes::load(const char *locale)
 	if( cd_latin != (iconv_t)-1 )
 		iconv_close(cd_latin);
 	cd = iconv_open(tocode, "");
-	cd_latin = iconv_open("ISO-8859-1", "");
+	cd_latin = iconv_open("UTF-8", "");
 	cd_from_sdl = iconv_open("ISO-8859-1//TRANSLIT//IGNORE", "UTF-8");
 #endif
 }

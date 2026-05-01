@@ -305,7 +305,6 @@ int main(int argc, char **argv)
 	sys.set_config_dir();
 
 	//try to read from CONFIG.DAT, moved to AM.CPP
-
 	if( !config.load("CONFIG.DAT") )
 	{
 		new_config_dat_flag = 1;
@@ -314,6 +313,9 @@ int main(int argc, char **argv)
 	config_adv.init();
 	if( config_adv.locale[0] )
 		locale_res.load(config_adv.locale);
+
+	//init resolution
+	config.init_resolution();
 
 	//----- read command line arguments -----//
 

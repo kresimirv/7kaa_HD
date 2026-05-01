@@ -31,6 +31,8 @@
 #include "gettext.h"
 #include <FilePath.h>
 #include <OGF_REC.h>
+#include <ConfigAdv.h>
+#include <OWORLD.h>
 
 DBGLOG_DEFAULT_CHANNEL(Config);
 
@@ -77,6 +79,42 @@ void Config::deinit()
 }
 //--------- End of function Config::deinit --------//
 
+
+//--------- Begin of function Config::init_resolution -----------//
+void Config::init_resolution()
+{
+	// get resolution from config file
+	resolution_type = config_adv.resolution;
+
+	switch( resolution_type )
+	{
+		case RES_768:
+			win_width = 1024; win_height = 768;
+			zoom_width = 800; zoom_height = 704;
+			break;
+		case RES_1080:
+			win_width = 1920; win_height = 1080;
+			zoom_width = 1696; zoom_height = 1024;
+			break;
+		case RES_600:
+		default:
+			win_width = 800; win_height = 600;
+			zoom_width = 576; zoom_height = 536;
+			break;
+	}
+
+	// recreate matrices since their sizes depend on ZOOM_WIDTH/ZOOM_HEIGHT
+	// which were evaluated to 0 during static initialization.
+	if (world.zoom_matrix) {
+		delete world.zoom_matrix;
+		world.zoom_matrix = new ZoomMatrix;
+	}
+	if (world.map_matrix) {
+		delete world.map_matrix;
+		world.map_matrix = new MapMatrix;
+	}
+}
+//--------- End of function Config::init_resolution --------//
 
 //--------- Begin of function Config::default_game_setting ---------//
 void Config::default_game_setting()

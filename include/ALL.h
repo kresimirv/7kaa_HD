@@ -31,6 +31,7 @@
 #include <OFILE.h>
 #include <GAMEDEF.h>
 #include <OERROR.h>
+#include <OCONFIG.h>
 
 
 //-------- Define macro functions -------//

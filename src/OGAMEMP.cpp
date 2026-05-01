@@ -1068,8 +1068,13 @@ const char *service_long_desc[SERVICE_BUTTON_NUM] =
 // 
 int Game::mp_select_service()
 {
-	static short buttonX[SERVICE_BUTTON_NUM] = { 171, 171, 171 };
-	static short buttonY[SERVICE_BUTTON_NUM] = {  57, 125, 193 };
+
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+
+	enum { BUTTON_NUM = 3 };
+	static short buttonX[BUTTON_NUM] = { 171, 171, 171 };
+	static short buttonY[BUTTON_NUM] = {  57, 125, 193 };
 	#define SERVICE_BUTTON_WIDTH 459
 	#define SERVICE_BUTTON_HEIGHT 67
 	enum { DESC_MARGIN = 10, DESC_TOP_MARGIN = 6 };
@@ -1081,15 +1086,15 @@ int Game::mp_select_service()
 
 	// -------- display button ---------//
 	Button3D returnButton;
-	returnButton.create(520, 538, "CANCEL-U", "CANCEL-D", 1, 0);
+	returnButton.create(MUPG_X1+520, MUPG_Y1 + 538, "CANCEL-U", "CANCEL-D", 1, 0);
 
-	ButtonCustom serviceButton[SERVICE_BUTTON_NUM];
+	ButtonCustom serviceButton[BUTTON_NUM];
 	int b;
-//	for( b = 0; b < SERVICE_BUTTON_NUM && mp_obj.get_service_provider(b+1); ++b )
-	for( b = 0; b < SERVICE_BUTTON_NUM; ++b )
+//	for( b = 0; b < BUTTON_NUM && mp_obj.get_service_provider(b+1); ++b )
+	for( b = 0; b < BUTTON_NUM; ++b )
 	{
-		serviceButton[b].create(buttonX[b], buttonY[b], 
-			buttonX[b]+SERVICE_BUTTON_WIDTH-1, buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
+		serviceButton[b].create(MUPG_X1 + buttonX[b], MUPG_Y1 + buttonY[b],
+			MUPG_X1 + buttonX[b]+SERVICE_BUTTON_WIDTH-1, MUPG_Y1 + buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL,0) );
 	}
 
@@ -1125,12 +1130,15 @@ int Game::mp_select_service()
 			{
 				//--------- display interface screen -------//
 
-				image_menu.put_to_buf( &vga_back, "MPG-PG1" );
+// 				image_menu.put_to_buf( &vga_back, "MPG-PG1" );
+				image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG1");
 				// protection : image_menu.put_to_buf( &vga_back, "MPG-PG1");
 				// ensure the user has the release version (I_MENU.RES)
 				// image_menu2.put_to_buf( &vga_back, "MPG-PG1") get the real one
-				image_menu2.put_to_buf( &vga_back, "MPG-PG1");
-				image_menu.put_back( 234, 15,
+// 				image_menu2.put_to_buf( &vga_back, "MPG-PG1");
+				image_menu2.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG1");
+
+				image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15,
 					sub_game_mode == 0 ? (char*)"TOP-NMPG" : (char*)"TOP-LMPG" );
 				vga_util.blt_buf(0, 0, vga_back.buf_width()-1, vga_back.buf_height()-1, 0);
 
@@ -1141,12 +1149,12 @@ int Game::mp_select_service()
 					// write service name to back buffer
 					char useBack = vga.use_back_buf;
 					vga.use_back();
-					font_bible.center_put(buttonX[b], y,
-						buttonX[b]+SERVICE_BUTTON_WIDTH-1, y+font_bible.max_font_height-1,
+					font_bible.center_put(MUPG_X1 + buttonX[b], MUPG_Y1 + y,
+						MUPG_X1 + buttonX[b]+SERVICE_BUTTON_WIDTH-1, MUPG_Y1 + y+font_bible.max_font_height-1,
 						_(service_short_desc[b]));
 					y += font_bible.max_font_height;
-					font_san.put_paragraph(buttonX[b]+DESC_MARGIN, y,
-						buttonX[b]+SERVICE_BUTTON_WIDTH-DESC_MARGIN-1, buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
+					font_san.put_paragraph(MUPG_X1 + buttonX[b]+DESC_MARGIN, MUPG_Y1 + y,
+						MUPG_X1 + buttonX[b]+SERVICE_BUTTON_WIDTH-DESC_MARGIN-1, MUPG_Y1 + buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
 						_(service_long_desc[b]));
 					if( !useBack )
 						vga.use_front();
@@ -1211,8 +1219,12 @@ const char *login_dialog_txt[] =
 // return 0 = cancel, 1 = create, 2 = join
 int Game::mp_select_mode(char *defSaveFileName, int service_mode)
 {
-	static short buttonX[SERVICE_BUTTON_NUM] = { 171, 171, 171 };
-	static short buttonY[SERVICE_BUTTON_NUM] = {  57, 125, 193 };
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+
+	enum { BUTTON_NUM = 3 };
+	static short buttonX[BUTTON_NUM] = { 171, 171, 171 };
+	static short buttonY[BUTTON_NUM] = {  57, 125, 193 };
 	#define SERVICE_BUTTON_WIDTH 459
 	#define SERVICE_BUTTON_HEIGHT 67
 	enum { DESC_MARGIN = 10, DESC_TOP_MARGIN = 6 };
@@ -1233,20 +1245,20 @@ int Game::mp_select_mode(char *defSaveFileName, int service_mode)
 		config.player_name[HUMAN_NAME_LEN] = '\0';
 	}
 
-	createButton.create(120, 538, "CREATE-U", "CREATE-D", 1, 0);
+	createButton.create(MUPG_X1 + 120, MUPG_Y1 + 538, "CREATE-U", "CREATE-D", 1, 0);
 	if( mp_obj.is_lobbied() == 2 )		// join only
 		createButton.enable_flag = 0;		// avoid paint();
-	joinButton.create(320, 538, "JOIN-U", "JOIN-D", 1, 0);
+	joinButton.create(MUPG_X1 + 320, MUPG_Y1 + 538, "JOIN-U", "JOIN-D", 1, 0);
 	if( mp_obj.is_lobbied() == 1 )		// join only
 		joinButton.enable_flag = 0;		// avoid paint();
 	// ####### end Gilbert 13/2 ##########//
-	returnButton.create(520, 538, "CANCEL-U", "CANCEL-D", 1, 0);
+	returnButton.create(MUPG_X1 + 520, MUPG_Y1 + 538, "CANCEL-U", "CANCEL-D", 1, 0);
 
-	ButtonCustom serviceButton[SERVICE_BUTTON_NUM];
-	for( int b = 0; b < SERVICE_BUTTON_NUM; ++b )
+	ButtonCustom serviceButton[BUTTON_NUM];
+	for( int b = 0; b < BUTTON_NUM; ++b )
 	{
-		serviceButton[b].create(buttonX[b], buttonY[b],
-			buttonX[b]+SERVICE_BUTTON_WIDTH-1, buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
+		serviceButton[b].create(MUPG_X1 + buttonX[b], MUPG_Y1 + buttonY[b],
+			MUPG_X1+buttonX[b]+SERVICE_BUTTON_WIDTH-1, MUPG_Y1+buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL,0) );
 	}
 
@@ -1283,8 +1295,8 @@ int Game::mp_select_mode(char *defSaveFileName, int service_mode)
 	GetAGroup keyInField(2);
 	GetA &getName = keyInField[0];
 	GetA &getSaveFile = keyInField[1];
-	getName.init( 319, 423, 582, config.player_name, HUMAN_NAME_LEN, &font_san, 0 ,1);
-	getSaveFile.init( 394, 447, 582, saveFileName, 8, &font_san, 0, 1);
+	getName.init(MUPG_X1 + 319, MUPG_Y1 + 423, MUPG_X1 + 582, config.player_name, HUMAN_NAME_LEN, &font_san, 0 ,1);
+	getSaveFile.init(MUPG_X1 + 394, MUPG_Y1 + 447, MUPG_X1 + 582, saveFileName, 8, &font_san, 0, 1);
 	keyInField.set_focus(0, 0);		// 0 in 2nd parameter - don't display
 
 	int rc = 0;
@@ -1316,26 +1328,30 @@ int Game::mp_select_mode(char *defSaveFileName, int service_mode)
 			{
 				//--------- display interface screen -------//
 
-				image_menu.put_to_buf( &vga_back, "MPG-PG1" );
+// 				image_menu.put_to_buf( &vga_back, "MPG-PG1" );
+				image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG1");
 				// protection : image_menu.put_to_buf( &vga_back, "MPG-PG1");
 				// ensure the user has the release version (I_MENU.RES)
 				// image_menu2.put_to_buf( &vga_back, "MPG-PG1") get the real one
-				image_menu2.put_to_buf( &vga_back, "MPG-PG1");
-				image_menu.put_back( 234, 15,
+// 				image_menu2.put_to_buf( &vga_back, "MPG-PG1");
+				image_menu2.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG1");
+
+
+				image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15,
 					sub_game_mode == 0 ? (char*)"TOP-NMPG" : (char*)"TOP-LMPG" );
 				int b = 0;
-				for( b = 0; b < SERVICE_BUTTON_NUM; ++b )
+				for( b = 0; b < BUTTON_NUM; ++b )
 				{
 					int y = buttonY[b]+DESC_TOP_MARGIN;
 					// write service name to back buffer
 					char useBack = vga.use_back_buf;
 					vga.use_back();
-					font_bible.center_put(buttonX[b], y,
-						buttonX[b]+SERVICE_BUTTON_WIDTH-1, y+font_bible.max_font_height-1,
+					font_bible.center_put(MUPG_X1 + buttonX[b], MUPG_Y1 + y,
+						MUPG_X1 + buttonX[b]+SERVICE_BUTTON_WIDTH-1, MUPG_Y1 + y+font_bible.max_font_height-1,
 						_(service_short_desc[b]));
 					y += font_bible.max_font_height;
-					font_san.put_paragraph(buttonX[b]+DESC_MARGIN, y,
-						buttonX[b]+SERVICE_BUTTON_WIDTH-DESC_MARGIN-1, buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
+					font_san.put_paragraph(MUPG_X1 + buttonX[b]+DESC_MARGIN, MUPG_Y1 + y,
+						MUPG_X1 + buttonX[b]+SERVICE_BUTTON_WIDTH-DESC_MARGIN-1, MUPG_Y1 + buttonY[b]+SERVICE_BUTTON_HEIGHT-1,
 						_(service_long_desc[b]));
 					if( !useBack )
 						vga.use_front();
@@ -1478,6 +1494,9 @@ struct InfoBox {
 
 void mp_info_box_show(InfoBox *info, const char *tell_string, const char *button_text)
 {
+	//int MUPG_X1 = VGA_X1;
+	//int MUPG_Y1 = VGA_Y1;
+
 	const int box_button_margin = 32;
 
 	if (info->visible)
@@ -1512,13 +1531,16 @@ int mp_info_box_detect(InfoBox *info)
 // The return is 1 when ok is pressed, and 0 when cancel is pressed.
 int Game::input_box(const char *tell_string, char *buf, int len, char hide_input)
 {
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+
 	const char *buttonDes1 = _("Ok");
 	const char *buttonDes2 = _("Cancel");
 	const int box_button_margin = 32; // BOX_BUTTON_MARGIN
-	const int box_x1 = 250;
-	const int box_y1 = 200;
-	const int box_x2 = 550;
-	const int box_y2 = 275;
+	const int box_x1 = MUPG_X1 + 250;
+	const int box_y1 = MUPG_Y1 + 200;
+	const int box_x2 = MUPG_X1 + 550;
+	const int box_y2 = MUPG_Y1 + 275;
 	const int box_side_margin = 10;
 	const int box_top_margin = 5;
 	int width, buttonWidth1, ret;
@@ -1608,9 +1630,11 @@ int Game::input_box(const char *tell_string, char *buf, int len, char hide_input
 // The return is 1 when ok is pressed, and 0 when cancel is pressed.
 int Game::input_name_pass(const char *txt[], char *name, int name_len, char *pass, int pass_len)
 {
-	const char *title = _(txt[0]);
-	const char *inputFieldDes1 = _(txt[1]);
-	const char *inputFieldDes2 = _(txt[2]);
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+	const char *title = txt[0];
+	const char *inputFieldDes1 = txt[1];
+	const char *inputFieldDes2 = txt[2];
 	const char *buttonDes1 = _("Ok");
 	const char *buttonDes2 = _("Cancel");
 	const int box_button_margin = 32; // BOX_BUTTON_MARGIN
@@ -1637,7 +1661,7 @@ int Game::input_name_pass(const char *txt[], char *name, int name_len, char *pas
 
 	box_x1 = VGA_WIDTH / 2 - boxWidth / 2;
 	box_x2 = VGA_WIDTH / 2 + boxWidth / 2;
-	box_y1 = 200;
+	box_y1 = MUPG_Y1+200;
 	box_y2 = box_y1 + boxHeight;
 	field_x_pos = box_side_margin + fieldDesWidth;
 
@@ -1747,7 +1771,8 @@ const char *login_failed_msg = N_("Unable to connect to the 7kfans service.\n(No
 //-------- Begin of function Game::mp_select_session --------//
 int Game::mp_select_session()
 {
-
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
 #define SSOPTION_PAGE           0x00000010
 #define SSOPTION_POLL_SESSION   0x00000001
 #define SSOPTION_DISP_SESSION   0x00000002
@@ -1783,23 +1808,23 @@ int Game::mp_select_session()
 	// ------- initialized button -----------//
 
 	Button3D joinButton;
-	joinButton.create(JOIN_BUTTON_X, JOIN_BUTTON_Y, "JOIN-U", "JOIN-D", 1, 0);
+	joinButton.create(MUPG_X1 + JOIN_BUTTON_X, MUPG_Y1 + JOIN_BUTTON_Y, "JOIN-U", "JOIN-D", 1, 0);
 	joinButton.disable();
 
 	Button3D cancelButton;
-	cancelButton.create(CANCEL_BUTTON_X, CANCEL_BUTTON_Y, "CANCEL-U", "CANCEL-D", 1, 0);
+	cancelButton.create(MUPG_X1 + CANCEL_BUTTON_X, MUPG_Y1 + CANCEL_BUTTON_Y, "CANCEL-U", "CANCEL-D", 1, 0);
 
 	SlideVBar scrollBar;
 
-	scrollBar.init_scroll(SCROLL_X1, SCROLL_Y1, SCROLL_X2, SCROLL_Y2,
+	scrollBar.init_scroll(MUPG_X1 + SCROLL_X1, MUPG_Y1 + SCROLL_Y1, MUPG_X1 + SCROLL_X2, MUPG_Y1 + SCROLL_Y2,
 		MAX_BUTTON, disp_scroll_bar_func);
 	scrollBar.set(1, 1, 1);		// assume it has one record
 
 	Button3D scrollUp;
-	scrollUp.create(SCROLL_X1,SCROLL_Y1-17, "SV-UP-U", "SV-UP-D", 1, 0);
+	scrollUp.create(MUPG_X1 + SCROLL_X1, MUPG_Y1 + SCROLL_Y1-17, "SV-UP-U", "SV-UP-D", 1, 0);
 
 	Button3D scrollDown;
-	scrollDown.create(SCROLL_X1,SCROLL_Y2+1, "SV-DW-U", "SV-DW-D", 1, 0);
+	scrollDown.create(MUPG_X1 + SCROLL_X1, MUPG_Y1 + SCROLL_Y2+1, "SV-DW-U", "SV-DW-D", 1, 0);
 
 	Blob browseArea[MAX_BUTTON];
 
@@ -1835,9 +1860,9 @@ int Game::mp_select_session()
 			if( refreshFlag & SSOPTION_PAGE )
 			{
 				// --------- display interface screen -------//
-				image_menu.put_to_buf( &vga_back, "MPG-PG2" );
-				image_menu2.put_to_buf( &vga_back, "MPG-PG2" );
-				image_menu.put_back( 234, 15,
+				image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG2");
+				image_menu2.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-PG2");
+				image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15,
 					sub_game_mode == 0 ? (char*)"TOP-NMPG" : (char*)"TOP-LMPG" );
 				vga_util.blt_buf(0, 0, vga_back.buf_width()-1, vga_back.buf_height()-1, 0);
 
@@ -2329,6 +2354,9 @@ int Game::mp_get_leader_board()
 // return 0 = cancel, 1 = ok
 int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 {
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+
 	const int offsetY = 212;
 	char optionMode = OPTION_BASIC;
 	char menuTitleBitmap[] = "TOP-NMPG";
@@ -2427,13 +2455,13 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	for( i = 0; i < MAX_RACE; ++i )
 	{
 #if(MAX_RACE == 10)
-		raceGroup[i].create(220+(i%5)*BASIC_OPTION_X_SPACE, (i/5)*BASIC_OPTION_HEIGHT+offsetY+70,
-			220+(i%5+1)*BASIC_OPTION_X_SPACE-1, (i/5+1)*BASIC_OPTION_HEIGHT+offsetY+70-1,
+		raceGroup[i].create(MUPG_X1+220+(i%5)*BASIC_OPTION_X_SPACE, (i/5)*BASIC_OPTION_HEIGHT+ MUPG_Y1 + offsetY+70,
+			MUPG_X1 + 220+(i%5+1)*BASIC_OPTION_X_SPACE-1, (i/5+1)*BASIC_OPTION_HEIGHT+ MUPG_Y1 + offsetY+70-1,
 			disp_virtual_button, ButtonCustomPara(&raceGroup, race_table[i]), 0, 0);
 		#define Y_SHIFT_FLAG 1
 #else
-		raceGroup[i].create(118+i*BASIC_OPTION_X_SPACE, offsetY+93,
-			118+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+93+BASIC_OPTION_HEIGHT-1,
+		raceGroup[i].create(MUPG_X1 + 118+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+93,
+			MUPG_X1 + 118+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+93+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&raceGroup, race_table[i]), 0, 0);
 		#define Y_SHIFT_FLAG 0
 #endif
@@ -2449,8 +2477,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		colorGroup[i].create(195+i*COLOR_OPTION_X_SPACE, offsetY+139+Y_SHIFT,
-			195+(i+1)*COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		colorGroup[i].create(MUPG_X1 + 195+i*COLOR_OPTION_X_SPACE, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 195+(i+1)*COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&colorGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -2464,11 +2492,11 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		aiNationInc.create(595, offsetY+139+Y_SHIFT, 
-			595+COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		aiNationInc.create(MUPG_X1 + 595, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 595+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL, +1) );
-		aiNationDec.create(630, offsetY+139+Y_SHIFT,
-			630+COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		aiNationDec.create(MUPG_X1 + 630, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 630+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL, -1) );
 		#undef Y_SHIFT
 	}
@@ -2483,8 +2511,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		diffGroup[i].create( 205+i*BASIC_OPTION_X_SPACE, offsetY+184+Y_SHIFT,
-			205+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+184+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		diffGroup[i].create(MUPG_X1 + 205+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+184+Y_SHIFT,
+			MUPG_X1 + 205+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+184+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&diffGroup, i), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -2499,8 +2527,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		terrainGroup[i].create(166+i*BASIC_OPTION_X_SPACE, offsetY+248+Y_SHIFT, 
-			166+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		terrainGroup[i].create(MUPG_X1 + 166+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+248+Y_SHIFT,
+			MUPG_X1 + 166+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&terrainGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -2515,14 +2543,14 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		landGroup[i].create(439+i*BASIC_OPTION_X_SPACE, offsetY+248+Y_SHIFT,
-			439+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		landGroup[i].create(MUPG_X1 + 439+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+248+Y_SHIFT,
+			MUPG_X1 + 439+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&landGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
 
 	GetA messageField;
-	messageField.init( 190, 116, 700, typingMsg.content,
+	messageField.init(MUPG_X1 + 190, MUPG_Y1 + 116, MUPG_X1 + 700, typingMsg.content,
 		MpStructChatMsg::MSG_LENGTH, &font_san, 0, 1);
 
 	// ###### begin Gilbert 25/10 #######//
@@ -2531,14 +2559,14 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	MpStructSeedStr msgSeedStr(info.random_seed);
 	GetA mapIdField;
 #if(defined(SPANISH))
-	#define MAPID_X1 588
+	#define MAPID_X1 MUPG_X1+588
 #elif(defined(FRENCH))
-	#define MAPID_X1 578
+	#define MAPID_X1 MUPG_X1+578
 #else
-	#define MAPID_X1 564
+	#define MAPID_X1 MUPG_X1+564
 #endif
 
-	mapIdField.init( MAPID_X1, offsetY+83, 700, msgSeedStr.seed_str, msgSeedStr.RANDOM_SEED_MAX_LEN, &font_san, 0, 1);
+	mapIdField.init( MAPID_X1, MUPG_Y1 + offsetY+83, MUPG_X1 + 700, msgSeedStr.seed_str, msgSeedStr.RANDOM_SEED_MAX_LEN, &font_san, 0, 1);
 #undef MAPID_X1
 	// ###### end Gilbert 25/10 #######//
 
@@ -2547,8 +2575,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup exploreGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		exploreGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+74, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+74+BASIC_OPTION_HEIGHT-1,
+		exploreGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+74,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+74+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&exploreGroup, 1-i), 0, 0);
 	}
 
@@ -2557,8 +2585,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup fogGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		fogGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+106, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+106+BASIC_OPTION_HEIGHT-1,
+		fogGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+106,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+106+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&fogGroup, 1-i), 0, 0);
 	}
 
@@ -2567,8 +2595,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup treasureGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		treasureGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+138,
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+138+BASIC_OPTION_HEIGHT-1,
+		treasureGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+138,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+138+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&treasureGroup, i+1), 0, 0);
 	}
 
@@ -2577,8 +2605,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup aiTreasureGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		aiTreasureGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+170,
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+170+BASIC_OPTION_HEIGHT-1,
+		aiTreasureGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+170,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&aiTreasureGroup, i+1), 0, 0);
 	}
 
@@ -2587,8 +2615,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup aiAggressiveGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		aiAggressiveGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+202,
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+202+BASIC_OPTION_HEIGHT-1,
+		aiAggressiveGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+202,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&aiAggressiveGroup, i+1), 0, 0);
 	}
 
@@ -2597,8 +2625,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup monsterGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		monsterGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+234, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+234+BASIC_OPTION_HEIGHT-1,
+		monsterGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+234,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&monsterGroup, i), 0, 0);
 	}
 
@@ -2607,19 +2635,19 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup randomStartUpGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		randomStartUpGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+266, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+266+BASIC_OPTION_HEIGHT-1,
+		randomStartUpGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+266,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&randomStartUpGroup, 1-i), 0, 0);
 	}
 
 	//  -------- initialize start_up_raw_site buttons --------- //
 
 	ButtonCustom rawSiteInc, rawSiteDec;
-	rawSiteInc.create( 358, offsetY+72, 
-		358+COLOR_OPTION_X_SPACE-1, offsetY+72+COLOR_OPTION_HEIGHT-1,
+	rawSiteInc.create(MUPG_X1 + 358, MUPG_Y1 + offsetY+72,
+		MUPG_X1 + 358+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+72+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL,0));
-	rawSiteDec.create( 393, offsetY+72, 
-		393+COLOR_OPTION_X_SPACE-1, offsetY+72+COLOR_OPTION_HEIGHT-1,
+	rawSiteDec.create(MUPG_X1 + 393, MUPG_Y1 + offsetY+72,
+		MUPG_X1 + 393+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+72+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL,0));
 
 	// --------- initialize start_up_has_mine_nearby button group --------//
@@ -2627,8 +2655,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup nearRawGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		nearRawGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+104,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+104+BASIC_OPTION_HEIGHT-1,
+		nearRawGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+104,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+104+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&nearRawGroup, 1-i), 0, 0);
 	}
 
@@ -2639,8 +2667,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup townStartGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		townStartGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+136, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+136+BASIC_OPTION_HEIGHT-1,
+		townStartGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+136,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+136+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townStartGroup, startTownArray[i]), 0, 0);
 	}
 
@@ -2649,8 +2677,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup townResistGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		townResistGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+168, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+168+BASIC_OPTION_HEIGHT-1,
+		townResistGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+168,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+168+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townResistGroup, i+1), 0, 0);
 	}
 
@@ -2659,8 +2687,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup townEmergeGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		townEmergeGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+200,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+200+BASIC_OPTION_HEIGHT-1,
+		townEmergeGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+200,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+200+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townEmergeGroup, 1-i), 0, 0);
 	}
 
@@ -2669,8 +2697,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup nationEmergeGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		nationEmergeGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+232,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+232+BASIC_OPTION_HEIGHT-1,
+		nationEmergeGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+232,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+232+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&nationEmergeGroup, 1-i), 0, 0);
 	}
 
@@ -2679,8 +2707,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustomGroup randomEventGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		randomEventGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+264, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+264+BASIC_OPTION_HEIGHT-1,
+		randomEventGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+264,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+264+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&randomEventGroup, i), 0, 0);
 	}
 
@@ -2690,55 +2718,55 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 	ButtonCustom clearEnemyButton, clearMonsterButton, enoughPeopleButton, enoughIncomeButton, enoughScoreButton, timeLimitButton;
 	ButtonCustom peopleInc, peopleDec, incomeInc, incomeDec, scoreInc, scoreDec, yearInc, yearDec;
 	
-	clearEnemyButton.create( 209, offsetY+109, 209+19, offsetY+109+19,	// -3
+	clearEnemyButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+109, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+109+19,	// -3
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 1);
 	clearEnemyButton.enable_flag = 0;;
-	clearMonsterButton.create( 209, offsetY+142, 209+19, offsetY+142+19,
+	clearMonsterButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+142, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+142+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 
 		tempConfig.goal_destroy_monster);
-	enoughPeopleButton.create( 209, offsetY+175, 209+19, offsetY+175+19,
+	enoughPeopleButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+175, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+175+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 
 		tempConfig.goal_population_flag);
-	enoughIncomeButton.create( 209, offsetY+208, 209+19, offsetY+208+19,
+	enoughIncomeButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+208, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+208+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_economic_score_flag);
-	enoughScoreButton.create( 209, offsetY+241, 209+19, offsetY+241+19,
+	enoughScoreButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+241, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+241+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_total_score_flag);
-	timeLimitButton.create( 209, offsetY+273, 209+19, offsetY+273+19,	// +29
+	timeLimitButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+273, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+273+19,	// +29
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_year_limit_flag);
 
-	peopleInc.create( 524, offsetY+170,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+170+COLOR_OPTION_HEIGHT-1, 
+	peopleInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+170,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	peopleDec.create( 559, offsetY+170, 
-		559+COLOR_OPTION_X_SPACE-1, offsetY+170+COLOR_OPTION_HEIGHT-1, 
+	peopleDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+170,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	incomeInc.create( 524, offsetY+202,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+202+COLOR_OPTION_HEIGHT-1, 
+	incomeInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+202,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	incomeDec.create( 559, offsetY+202,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+202+COLOR_OPTION_HEIGHT-1, 
+	incomeDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+202,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	scoreInc.create( 524, offsetY+234,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+234+COLOR_OPTION_HEIGHT-1, 
+	scoreInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+234,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	scoreDec.create( 559, offsetY+234,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+234+COLOR_OPTION_HEIGHT-1, 
+	scoreDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+234,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	yearInc.create( 524, offsetY+266,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+266+COLOR_OPTION_HEIGHT-1, 
+	yearInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+266,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	yearDec.create( 559, offsetY+266,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+266+COLOR_OPTION_HEIGHT-1, 
+	yearDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+266,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
 	// ##### end Gilbert 25/10 #######//
 
 	Button3D startButton, readyButton, returnButton;
-	readyButton.create(120, 538, "READY-U", "READY-D", 1, 0);
-	startButton.create(320, 538, "START-U", "START-D", 1, 0);
-	returnButton.create(520, 538, "CANCEL-U", "CANCEL-D", 1, 0);
+	readyButton.create(MUPG_X1 + 120, MUPG_Y1 + 538, "READY-U", "READY-D", 1, 0);
+	startButton.create(MUPG_X1 + 320, MUPG_Y1 + 538, "START-U", "START-D", 1, 0);
+	returnButton.create(MUPG_X1 + 520, MUPG_Y1 + 538, "CANCEL-U", "CANCEL-D", 1, 0);
 
 	InfoBox info_box;
 
@@ -2774,14 +2802,15 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-BSC");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1,"MPG-BSC");
 #if(MAX_RACE == 10)
 					// protection : image_menu.put_to_buf( &vga_back, "MPG-BSC");
 					// ensure the user has the release version (I_MENU.RES)
 					// image_menu2.put_to_buf( &vga_back, "MPG-BSC") get the real one
-					image_menu2.put_to_buf( &vga_back, "MPG-BSC");
+// 					image_menu2.put_to_buf( &vga_back, "MPG-BSC");
+					image_menu2.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-BSC");
 #endif
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+					image_menu.put_back(MUPG_X1+234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_RACE )
@@ -2795,7 +2824,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 					#else
 						#define Y_SHIFT 0
 					#endif
-					font_san.center_put(564, offsetY+144+Y_SHIFT, 564+25, offsetY+144+Y_SHIFT+21,
+					font_san.center_put(MUPG_X1 + 564, MUPG_Y1+offsetY+144+Y_SHIFT, 
+						MUPG_X1 + 564+25, MUPG_Y1+offsetY+144+Y_SHIFT+21,
 						misc.format(tempConfig.ai_nation_count), 1);
 					aiNationInc.paint();
 					aiNationDec.paint();
@@ -2814,8 +2844,10 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-O1");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+
+// 					image_menu.put_to_buf( &vga_back, "MPG-O1");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-O1");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				// ###### begin Gilbert 25/10 #######//
@@ -2843,13 +2875,15 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-O2");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+// 					image_menu.put_to_buf( &vga_back, "MPG-O2");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-O2");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_RAW )
 				{
-					font_san.center_put(327, offsetY+77, 327+25, offsetY+77+21,
+					font_san.center_put(MUPG_X1 + 327, MUPG_Y1+offsetY+77, 
+						MUPG_X1 + 327+25, MUPG_Y1+offsetY+77+21,
 						misc.format(tempConfig.start_up_raw_site), 1);
 					rawSiteInc.paint();
 					rawSiteDec.paint();
@@ -2877,8 +2911,9 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-GOAL");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+// 					image_menu.put_to_buf( &vga_back, "MPG-GOAL");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-GOAL");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_CLEAR_ENEMY )
@@ -2889,7 +2924,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				if( refreshFlag & SGOPTION_ENOUGH_PEOPLE )
 				{
 					enoughPeopleButton.paint(tempConfig.goal_population_flag);
-					font_san.center_put( 446, offsetY+176, 446+67, offsetY+176+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1+offsetY+176, 
+						MUPG_X1 + 446+67, MUPG_Y1+offsetY+176+21,
 						misc.format(tempConfig.goal_population), 1);
 					peopleInc.paint();
 					peopleDec.paint();
@@ -2897,7 +2933,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				if( refreshFlag & SGOPTION_ENOUGH_INCOME )
 				{
 					enoughIncomeButton.paint(tempConfig.goal_economic_score_flag);
-					font_san.center_put( 446, offsetY+207, 446+67, offsetY+207+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1+offsetY+207, 
+						MUPG_X1 + 446+67, MUPG_Y1+offsetY+207+21,
 						misc.format(tempConfig.goal_economic_score), 1);
 					incomeInc.paint();
 					incomeDec.paint();
@@ -2905,7 +2942,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				if( refreshFlag & SGOPTION_ENOUGH_SCORE )
 				{
 					enoughScoreButton.paint(tempConfig.goal_total_score_flag);
-					font_san.center_put( 446, offsetY+239, 446+67, offsetY+239+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1+offsetY+239, 
+						MUPG_X1 + 446+67, MUPG_Y1+offsetY+239+21,
 						misc.format(tempConfig.goal_total_score), 1);
 					scoreInc.paint();
 					scoreDec.paint();
@@ -2913,7 +2951,8 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				if( refreshFlag & SGOPTION_TIME_LIMIT )
 				{
 					timeLimitButton.paint(tempConfig.goal_year_limit_flag);
-					font_san.center_put( 446, offsetY+271, 446+33, offsetY+271+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1+offsetY+271, 
+						MUPG_X1 + 446+33, MUPG_Y1+offsetY+271+21,
 						misc.format(tempConfig.goal_year_limit), 1);
 					yearInc.paint();
 					yearDec.paint();
@@ -2924,15 +2963,15 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			// -------- refresh players in the session --------//
 			if( mRefreshFlag & MGOPTION_PLAYERS )
 			{
-				vga_util.blt_buf( 96, 46, 702, 100, 0 );
+				vga_util.blt_buf(MUPG_X1 + 96, MUPG_Y1 + 46, MUPG_X1 + 702, MUPG_Y1 + 100, 0 );
 				for( p = 0; p < regPlayerCount; ++p)
 				{
 					if( playerReadyFlag[p] )
 					{
-						image_menu.put_front( tickX[p]+3, tickY[p]+3, "NMPG-RCH" );
+						image_menu.put_front(MUPG_X1 + tickX[p]+3, MUPG_Y1 + tickY[p]+3, "NMPG-RCH" );
 					}
 					PlayerDesc *dispPlayer = mp_obj.search_player(regPlayerId[p]);
-					font_san.put( tickX[p]+nameOffsetX, tickY[p]+nameOffsetY, dispPlayer?dispPlayer->name:(char*)_("?anonymous?") );
+					font_san.put(MUPG_X1 + tickX[p]+nameOffsetX, MUPG_Y1 + tickY[p]+nameOffsetY, dispPlayer?dispPlayer->name:(char*)_("?anonymous?") );
 				}
 			}
 
@@ -2945,20 +2984,20 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 			// ------------- display incoming chat message --------//
 			if( mRefreshFlag & MGOPTION_IN_MESSAGE )
 			{
-				vga_util.blt_buf( 101, 135, 700, 202, 0 );
+				vga_util.blt_buf(MUPG_X1 + 101, MUPG_Y1 + 135, MUPG_X1 + 700, MUPG_Y1 + 202, 0 );
 				for( p = 1; p <= 4 && p <= messageList.size() ; ++p)
 				{
-					int ny = 136+(p-1)*16;
-					int nx = font_san.put( 102, ny, ((MpStructChatMsg *)messageList.get(p))->sender );
-					nx = font_san.put( nx, ny, " : ");
-					nx = font_san.put( nx, ny, ((MpStructChatMsg *)messageList.get(p))->content, 0, 700);
+					int ny = MUPG_Y1 + 136+(p-1)*16;
+					int nx = font_san.put(MUPG_X1 + 102, ny, ((MpStructChatMsg *)messageList.get(p))->sender );
+					nx = font_san.put(nx, ny, " : ");
+					nx = font_san.put(nx, ny, ((MpStructChatMsg *)messageList.get(p))->content, 0, MUPG_X1 + 700);
 				}
 			}
 
 			// ------- display difficulty -------//
 			if( (refreshFlag & SGOPTION_DIFFICULTY) || (mRefreshFlag & MGOPTION_PLAYERS) )
 			{
-				font_san.center_put( 718, offsetY+74, 780, offsetY+108, 
+				font_san.center_put(MUPG_X1 + 718, MUPG_Y1 + offsetY+74, MUPG_X1 + 780, MUPG_Y1 +offsetY+108,
 					misc.format(tempConfig.multi_player_difficulty(regPlayerCount-1)), 1 );
 			}
 
@@ -3847,7 +3886,7 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 
 		// --------- detect switch option button ------//
 
-		if( mouse.single_click(96, offsetY+12, 218, offsetY+54) )
+		if( mouse.single_click(MUPG_X1+96, MUPG_Y1 + offsetY+12, MUPG_X1 + 218, MUPG_Y1 + offsetY+54) )
 		{
 			if( optionMode != OPTION_BASIC )
 			{
@@ -3856,7 +3895,7 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				mRefreshFlag = MGOPTION_ALL;
 			}
 		}
-		else if( mouse.single_click(236, offsetY+12, 363, offsetY+54) )
+		else if( mouse.single_click(MUPG_X1 + 236, MUPG_Y1 + offsetY+12, MUPG_X1 + 363, MUPG_Y1 + offsetY+54) )
 		{
 			if( optionMode != OPTION_ADVANCED )
 			{
@@ -3865,7 +3904,7 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				mRefreshFlag = MGOPTION_ALL;
 			}
 		}
-		else if( mouse.single_click(380, offsetY+12, 506, offsetY+54) )
+		else if( mouse.single_click(MUPG_X1 + 380, MUPG_Y1 + offsetY+12, MUPG_X1 + 506, MUPG_Y1 + offsetY+54) )
 		{
 			if( optionMode != OPTION_ADVANCE2 )
 			{
@@ -3874,7 +3913,7 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 				mRefreshFlag = MGOPTION_ALL;
 			}
 		}
-		else if( mouse.single_click(523, offsetY+12, 649, offsetY+54) )
+		else if( mouse.single_click(MUPG_X1 + 523, MUPG_Y1 + offsetY+12, MUPG_X1 + 649, MUPG_Y1 + offsetY+54) )
 		{
 			if( optionMode != OPTION_GOAL )
 			{
@@ -4231,6 +4270,9 @@ int Game::mp_select_option(NewNationPara *nationPara, int *mpPlayerCount)
 // return 0 = cancel, 1 = ok
 int Game::mp_select_load_option(char *fileName)
 {
+	int MUPG_X1 = VGA_X1;
+	int MUPG_Y1 = VGA_Y1;
+
 	const int offsetY = 212;
 	char optionMode = OPTION_BASIC;
 	char menuTitleBitmap[] = "TOP-LMPG";
@@ -4337,13 +4379,13 @@ int Game::mp_select_load_option(char *fileName)
 	for( i = 0; i < MAX_RACE; ++i )
 	{
 #if(MAX_RACE == 10)
-		raceGroup[i].create(220+(i%5)*BASIC_OPTION_X_SPACE, (i/5)*BASIC_OPTION_HEIGHT+offsetY+70,
-			220+(i%5+1)*BASIC_OPTION_X_SPACE-1, (i/5+1)*BASIC_OPTION_HEIGHT+offsetY+70-1,
+		raceGroup[i].create(MUPG_X1 + 220+(i%5)*BASIC_OPTION_X_SPACE, MUPG_Y1 + (i/5)*BASIC_OPTION_HEIGHT+offsetY+70,
+			MUPG_X1 + 220+(i%5+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + (i/5+1)*BASIC_OPTION_HEIGHT+offsetY+70-1,
 			disp_virtual_button, ButtonCustomPara(&raceGroup, race_table[i]), 0, 0);
 		#define Y_SHIFT_FLAG 1
 #else
-		raceGroup[i].create(118+i*BASIC_OPTION_X_SPACE, offsetY+93,
-			118+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+93+BASIC_OPTION_HEIGHT-1,
+		raceGroup[i].create(MUPG_X1 + 118+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+93,
+			MUPG_X1 + 118+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+93+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&raceGroup, race_table[i]), 0, 0);
 		#define Y_SHIFT_FLAG 0
 #endif
@@ -4359,8 +4401,8 @@ int Game::mp_select_load_option(char *fileName)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		colorGroup[i].create(195+i*COLOR_OPTION_X_SPACE, offsetY+139+Y_SHIFT,
-			195+(i+1)*COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		colorGroup[i].create(MUPG_X1 + 195+i*COLOR_OPTION_X_SPACE, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 195+(i+1)*COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&colorGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -4374,11 +4416,11 @@ int Game::mp_select_load_option(char *fileName)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		aiNationInc.create(595, offsetY+139+Y_SHIFT, 
-			595+COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		aiNationInc.create(MUPG_X1 + 595, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 595+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL, +1) );
-		aiNationDec.create(630, offsetY+139+Y_SHIFT,
-			630+COLOR_OPTION_X_SPACE-1, offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
+		aiNationDec.create(MUPG_X1 + 630, MUPG_Y1 + offsetY+139+Y_SHIFT,
+			MUPG_X1 + 630+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+139+Y_SHIFT+COLOR_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(NULL, -1) );
 		#undef Y_SHIFT
 	}
@@ -4393,8 +4435,8 @@ int Game::mp_select_load_option(char *fileName)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		diffGroup[i].create( 205+i*BASIC_OPTION_X_SPACE, offsetY+184+Y_SHIFT,
-			205+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+184+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		diffGroup[i].create(MUPG_X1 + 205+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+184+Y_SHIFT,
+			MUPG_X1 + 205+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+184+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&diffGroup, i), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -4409,8 +4451,8 @@ int Game::mp_select_load_option(char *fileName)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		terrainGroup[i].create(166+i*BASIC_OPTION_X_SPACE, offsetY+248+Y_SHIFT, 
-			166+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		terrainGroup[i].create(MUPG_X1 + 166+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+248+Y_SHIFT,
+			MUPG_X1 + 166+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&terrainGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
@@ -4425,14 +4467,14 @@ int Game::mp_select_load_option(char *fileName)
 		#else
 			#define Y_SHIFT 0
 		#endif
-		landGroup[i].create(439+i*BASIC_OPTION_X_SPACE, offsetY+248+Y_SHIFT,
-			439+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
+		landGroup[i].create(MUPG_X1 + 439+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+248+Y_SHIFT,
+			MUPG_X1 + 439+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+248+Y_SHIFT+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&landGroup, i+1), 0, 0);
 		#undef Y_SHIFT
 	}
 
 	GetA messageField;
-	messageField.init( 190, 116, 700, typingMsg.content,
+	messageField.init(MUPG_X1 + 190, MUPG_Y1 + 116, MUPG_X1 + 700, typingMsg.content,
 		MpStructChatMsg::MSG_LENGTH, &font_san, 0, 1);
 	
 	// ###### begin Gilbert 25/10 #######//
@@ -4441,13 +4483,13 @@ int Game::mp_select_load_option(char *fileName)
 	MpStructSeedStr msgSeedStr(info.random_seed);
 	GetA mapIdField;
 #if(defined(SPANISH))
-	#define MAPID_X1 588
+	#define MAPID_X1 MUPG_X1+588
 #elif(defined(FRENCH))
-	#define MAPID_X1 578
+	#define MAPID_X1 MUPG_X1+578
 #else
-	#define MAPID_X1 564
+	#define MAPID_X1 MUPG_X1+564
 #endif
-	mapIdField.init( MAPID_X1, offsetY+83, 700, msgSeedStr.seed_str, msgSeedStr.RANDOM_SEED_MAX_LEN, &font_san, 0, 1);
+	mapIdField.init( MAPID_X1, MUPG_Y1 + offsetY+83, MUPG_X1 + 700, msgSeedStr.seed_str, msgSeedStr.RANDOM_SEED_MAX_LEN, &font_san, 0, 1);
 #undef MAPID_X1
 	// ###### end Gilbert 25/10 #######//
 
@@ -4456,8 +4498,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup exploreGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		exploreGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+74, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+74+BASIC_OPTION_HEIGHT-1,
+		exploreGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+74,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+74+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&exploreGroup, 1-i), 0, 0);
 	}
 
@@ -4466,8 +4508,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup fogGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		fogGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+106, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+106+BASIC_OPTION_HEIGHT-1,
+		fogGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+106,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+106+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&fogGroup, 1-i), 0, 0);
 	}
 
@@ -4476,8 +4518,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup treasureGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		treasureGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+138,
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+138+BASIC_OPTION_HEIGHT-1,
+		treasureGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+138,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+138+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&treasureGroup, i+1), 0, 0);
 	}
 
@@ -4486,8 +4528,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup aiTreasureGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		aiTreasureGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+170,
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+170+BASIC_OPTION_HEIGHT-1,
+		aiTreasureGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+170,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&aiTreasureGroup, i+1), 0, 0);
 	}
 
@@ -4496,8 +4538,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup aiAggressiveGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		aiAggressiveGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+202, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+202+BASIC_OPTION_HEIGHT-1,
+		aiAggressiveGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+202,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&aiAggressiveGroup, i+1), 0, 0);
 	}
 
@@ -4506,8 +4548,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup monsterGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		monsterGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+234, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+234+BASIC_OPTION_HEIGHT-1,
+		monsterGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+234,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&monsterGroup, i), 0, 0);
 	}
 
@@ -4516,8 +4558,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup randomStartUpGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		randomStartUpGroup[i].create(335+i*BASIC_OPTION_X_SPACE, offsetY+266, 
-			335+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+266+BASIC_OPTION_HEIGHT-1,
+		randomStartUpGroup[i].create(MUPG_X1 + 335+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+266,
+			MUPG_X1 + 335+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&randomStartUpGroup, 1-i), 0, 0);
 	}
 
@@ -4525,10 +4567,10 @@ int Game::mp_select_load_option(char *fileName)
 
 	ButtonCustom rawSiteInc, rawSiteDec;
 	rawSiteInc.create( 358, offsetY+72, 
-		358+COLOR_OPTION_X_SPACE-1, offsetY+72+COLOR_OPTION_HEIGHT-1,
+		MUPG_X1 + 358+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+72+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL,0));
 	rawSiteDec.create( 393, offsetY+72, 
-		393+COLOR_OPTION_X_SPACE-1, offsetY+72+COLOR_OPTION_HEIGHT-1,
+		MUPG_X1 + 393+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+72+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL,0));
 
 	// --------- initialize start_up_has_mine_nearby button group --------//
@@ -4536,8 +4578,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup nearRawGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		nearRawGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+104,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+104+BASIC_OPTION_HEIGHT-1,
+		nearRawGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+104,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+104+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&nearRawGroup, 1-i), 0, 0);
 	}
 
@@ -4548,8 +4590,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup townStartGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		townStartGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+136, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+136+BASIC_OPTION_HEIGHT-1,
+		townStartGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+136,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+136+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townStartGroup, startTownArray[i]), 0, 0);
 	}
 
@@ -4558,8 +4600,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup townResistGroup(3);
 	for( i = 0; i < 3; ++i )
 	{
-		townResistGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+168, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+168+BASIC_OPTION_HEIGHT-1,
+		townResistGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+168,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+168+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townResistGroup, i+1), 0, 0);
 	}
 
@@ -4568,8 +4610,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup townEmergeGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		townEmergeGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+200,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+200+BASIC_OPTION_HEIGHT-1,
+		townEmergeGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+200,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+200+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&townEmergeGroup, 1-i), 0, 0);
 	}
 
@@ -4578,8 +4620,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup nationEmergeGroup(2);
 	for( i = 0; i < 2; ++i )
 	{
-		nationEmergeGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+232,
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+232+BASIC_OPTION_HEIGHT-1,
+		nationEmergeGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+232,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+232+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&nationEmergeGroup, 1-i), 0, 0);
 	}
 
@@ -4588,8 +4630,8 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustomGroup randomEventGroup(4);
 	for( i = 0; i < 4; ++i )
 	{
-		randomEventGroup[i].create(322+i*BASIC_OPTION_X_SPACE, offsetY+264, 
-			322+(i+1)*BASIC_OPTION_X_SPACE-1, offsetY+264+BASIC_OPTION_HEIGHT-1,
+		randomEventGroup[i].create(MUPG_X1 + 322+i*BASIC_OPTION_X_SPACE, MUPG_Y1 + offsetY+264,
+			MUPG_X1 + 322+(i+1)*BASIC_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+264+BASIC_OPTION_HEIGHT-1,
 			disp_virtual_button, ButtonCustomPara(&randomEventGroup, i), 0, 0);
 	}
 
@@ -4599,55 +4641,55 @@ int Game::mp_select_load_option(char *fileName)
 	ButtonCustom clearEnemyButton, clearMonsterButton, enoughPeopleButton, enoughIncomeButton, enoughScoreButton, timeLimitButton;
 	ButtonCustom peopleInc, peopleDec, incomeInc, incomeDec, scoreInc, scoreDec, yearInc, yearDec;
 	
-	clearEnemyButton.create( 209, offsetY+109, 209+19, offsetY+109+19,	// -3
+	clearEnemyButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+109, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+109+19,	// -3
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 1);
 	clearEnemyButton.enable_flag = 0;;
-	clearMonsterButton.create( 209, offsetY+142, 209+19, offsetY+142+19,
+	clearMonsterButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+142, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+142+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 
 		tempConfig.goal_destroy_monster);
-	enoughPeopleButton.create( 209, offsetY+175, 209+19, offsetY+175+19,
+	enoughPeopleButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+175, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+175+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0, 
 		tempConfig.goal_population_flag);
-	enoughIncomeButton.create( 209, offsetY+208, 209+19, offsetY+208+19,
+	enoughIncomeButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+208, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+208+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_economic_score_flag);
-	enoughScoreButton.create( 209, offsetY+241, 209+19, offsetY+241+19,
+	enoughScoreButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+241, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+241+19,
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_total_score_flag);
-	timeLimitButton.create( 209, offsetY+273, 209+19, offsetY+273+19,	// +29
+	timeLimitButton.create(MUPG_X1 + 209, MUPG_Y1 + offsetY+273, MUPG_X1 + 209+19, MUPG_Y1 + offsetY+273+19,	// +29
 		disp_virtual_tick, ButtonCustomPara(NULL, 0), 0,
 		tempConfig.goal_year_limit_flag);
 
-	peopleInc.create( 524, offsetY+170,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+170+COLOR_OPTION_HEIGHT-1, 
+	peopleInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+170,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	peopleDec.create( 559, offsetY+170, 
-		559+COLOR_OPTION_X_SPACE-1, offsetY+170+COLOR_OPTION_HEIGHT-1, 
+	peopleDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+170,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+170+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	incomeInc.create( 524, offsetY+202,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+202+COLOR_OPTION_HEIGHT-1, 
+	incomeInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+202,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	incomeDec.create( 559, offsetY+202,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+202+COLOR_OPTION_HEIGHT-1, 
+	incomeDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+202,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+202+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	scoreInc.create( 524, offsetY+234,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+234+COLOR_OPTION_HEIGHT-1, 
+	scoreInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+234,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	scoreDec.create( 559, offsetY+234,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+234+COLOR_OPTION_HEIGHT-1, 
+	scoreDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+234,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+234+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	yearInc.create( 524, offsetY+266,
-		524+COLOR_OPTION_X_SPACE-1, offsetY+266+COLOR_OPTION_HEIGHT-1, 
+	yearInc.create(MUPG_X1 + 524, MUPG_Y1 + offsetY+266,
+		MUPG_X1 + 524+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
-	yearDec.create( 559, offsetY+266,
-		559+COLOR_OPTION_X_SPACE-1, offsetY+266+COLOR_OPTION_HEIGHT-1, 
+	yearDec.create(MUPG_X1 + 559, MUPG_Y1 + offsetY+266,
+		MUPG_X1 + 559+COLOR_OPTION_X_SPACE-1, MUPG_Y1 + offsetY+266+COLOR_OPTION_HEIGHT-1,
 		disp_virtual_button, ButtonCustomPara(NULL, 0) );
 	// ##### end Gilbert 25/10 #######//
 
 	Button3D startButton, readyButton, returnButton;
-	readyButton.create(120, 538, "READY-U", "READY-D", 1, 0);
-	startButton.create(320, 538, "START-U", "START-D", 1, 0);
-	returnButton.create(520, 538, "CANCEL-U", "CANCEL-D", 1, 0);
+	readyButton.create(MUPG_X1 + 120, MUPG_X1 + 538, "READY-U", "READY-D", 1, 0);
+	startButton.create(MUPG_X1 + 320, MUPG_X1 + 538, "START-U", "START-D", 1, 0);
+	returnButton.create(MUPG_X1 + 520, MUPG_X1 + 538, "CANCEL-U", "CANCEL-D", 1, 0);
 
 	InfoBox info_box;
 
@@ -4682,13 +4724,15 @@ int Game::mp_select_load_option(char *fileName)
 				if( refreshFlag & SGOPTION_PAGE )
 				{
 					image_menu.put_to_buf( &vga_back, "MPG-BSC");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-BSC");
 #if(MAX_RACE == 10)
 					// protection : image_menu.put_to_buf( &vga_back, "MPG-BSC");
 					// ensure the user has the release version (I_MENU.RES)
 					// image_menu2.put_to_buf( &vga_back, "MPG-BSC") get the real one
-					image_menu2.put_to_buf( &vga_back, "MPG-BSC");
+// 					image_menu2.put_to_buf( &vga_back, "MPG-BSC");
+					image_menu2.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-BSC");
 #endif
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_RACE )
@@ -4702,7 +4746,7 @@ int Game::mp_select_load_option(char *fileName)
 					#else
 						#define Y_SHIFT 0
 					#endif
-					font_san.center_put(564, offsetY+144+Y_SHIFT, 564+25, offsetY+144+Y_SHIFT+21,
+					font_san.center_put(MUPG_X1 + 564, MUPG_Y1 + offsetY+144+Y_SHIFT, MUPG_X1 + 564+25, MUPG_Y1 + offsetY+144+Y_SHIFT+21,
 						misc.format(tempConfig.ai_nation_count), 1);
 					aiNationInc.paint();
 					aiNationDec.paint();
@@ -4721,8 +4765,9 @@ int Game::mp_select_load_option(char *fileName)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-O1");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+// 					image_menu.put_to_buf( &vga_back, "MPG-O1");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-O1");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				// ###### begin Gilbert 24/10 #######//
@@ -4750,13 +4795,14 @@ int Game::mp_select_load_option(char *fileName)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-O2");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+// 					image_menu.put_to_buf( &vga_back, "MPG-O2");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-O2");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_RAW )
 				{
-					font_san.center_put(327, offsetY+77, 327+25, offsetY+77+21,
+					font_san.center_put(MUPG_X1 + 327, MUPG_Y1 + offsetY+77, MUPG_X1 + 327+25, MUPG_Y1 + offsetY+77+21,
 						misc.format(tempConfig.start_up_raw_site), 1);
 					rawSiteInc.paint();
 					rawSiteDec.paint();
@@ -4784,8 +4830,9 @@ int Game::mp_select_load_option(char *fileName)
 			{
 				if( refreshFlag & SGOPTION_PAGE )
 				{
-					image_menu.put_to_buf( &vga_back, "MPG-GOAL");
-					image_menu.put_back( 234, 15, menuTitleBitmap);
+// 					image_menu.put_to_buf( &vga_back, "MPG-GOAL");
+					image_menu.put_large(&vga_back, MUPG_X1, MUPG_Y1, "MPG-GOAL");
+					image_menu.put_back(MUPG_X1 + 234, MUPG_Y1 + 15, menuTitleBitmap);
 					vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1,0);
 				}
 				if( refreshFlag & SGOPTION_CLEAR_ENEMY )
@@ -4796,7 +4843,7 @@ int Game::mp_select_load_option(char *fileName)
 				if( refreshFlag & SGOPTION_ENOUGH_PEOPLE )
 				{
 					enoughPeopleButton.paint(tempConfig.goal_population_flag);
-					font_san.center_put( 446, offsetY+176, 446+67, offsetY+176+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1 + offsetY+176, MUPG_X1 + 446+67, MUPG_Y1 + offsetY+176+21,
 						misc.format(tempConfig.goal_population), 1);
 					peopleInc.paint();
 					peopleDec.paint();
@@ -4804,7 +4851,7 @@ int Game::mp_select_load_option(char *fileName)
 				if( refreshFlag & SGOPTION_ENOUGH_INCOME )
 				{
 					enoughIncomeButton.paint(tempConfig.goal_economic_score_flag);
-					font_san.center_put( 446, offsetY+207, 446+67, offsetY+207+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1 + offsetY+207, MUPG_X1 + 446+67, MUPG_Y1 + offsetY+207+21,
 						misc.format(tempConfig.goal_economic_score), 1);
 					incomeInc.paint();
 					incomeDec.paint();
@@ -4812,7 +4859,7 @@ int Game::mp_select_load_option(char *fileName)
 				if( refreshFlag & SGOPTION_ENOUGH_SCORE )
 				{
 					enoughScoreButton.paint(tempConfig.goal_total_score_flag);
-					font_san.center_put( 446, offsetY+239, 446+67, offsetY+239+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1 + offsetY+239, MUPG_X1 + 446+67, MUPG_Y1 + offsetY+239+21,
 						misc.format(tempConfig.goal_total_score), 1);
 					scoreInc.paint();
 					scoreDec.paint();
@@ -4820,7 +4867,7 @@ int Game::mp_select_load_option(char *fileName)
 				if( refreshFlag & SGOPTION_TIME_LIMIT )
 				{
 					timeLimitButton.paint(tempConfig.goal_year_limit_flag);
-					font_san.center_put( 446, offsetY+271, 446+33, offsetY+271+21,
+					font_san.center_put(MUPG_X1 + 446, MUPG_Y1 + offsetY+271, MUPG_X1 + 446+33, MUPG_Y1 + offsetY+271+21,
 						misc.format(tempConfig.goal_year_limit), 1);
 					yearInc.paint();
 					yearDec.paint();
@@ -4852,20 +4899,28 @@ int Game::mp_select_load_option(char *fileName)
 			// ------------- display incoming chat message --------//
 			if( mRefreshFlag & MGOPTION_IN_MESSAGE )
 			{
-				vga_util.blt_buf( 101, 135, 700, 202, 0 );
-				for( p = 1; p <= 4 && p <= messageList.size() ; ++p)
+// 				vga_util.blt_buf( 101, 135, 700, 202, 0 );
+// 				for( p = 1; p <= 4 && p <= messageList.size() ; ++p)
+// 				{
+// 					int ny = 136+(p-1)*16;
+// 					int nx = font_san.put( 102, ny, ((MpStructChatMsg *)messageList.get(p))->sender );
+// 					nx = font_san.put( nx, ny, " : ");
+// 					nx = font_san.put( nx, ny, ((MpStructChatMsg *)messageList.get(p))->content, 0, 700);
+// 				}
+				vga_util.blt_buf(MUPG_X1 + 101, MUPG_Y1 + 135, MUPG_X1 + 700, MUPG_Y1 + 202, 0);
+				for (p = 1; p <= 4 && p <= messageList.size(); ++p)
 				{
-					int ny = 136+(p-1)*16;
-					int nx = font_san.put( 102, ny, ((MpStructChatMsg *)messageList.get(p))->sender );
-					nx = font_san.put( nx, ny, " : ");
-					nx = font_san.put( nx, ny, ((MpStructChatMsg *)messageList.get(p))->content, 0, 700);
+					int ny = MUPG_Y1 + 136 + (p - 1) * 16;
+					int nx = font_san.put(MUPG_X1 + 102, ny, ((MpStructChatMsg *)messageList.get(p))->sender);
+					nx = font_san.put(nx, ny, " : ");
+					nx = font_san.put(nx, ny, ((MpStructChatMsg *)messageList.get(p))->content, 0, MUPG_X1 + 700);
 				}
 			}
 
 			// ------- display difficulty -------//
 			if( (refreshFlag & SGOPTION_DIFFICULTY) || (mRefreshFlag & MGOPTION_PLAYERS) )
 			{
-				font_san.center_put( 718, offsetY+84, 774, offsetY+108, 
+				font_san.center_put(MUPG_X1 + 718, MUPG_Y1 + offsetY+84, MUPG_X1 + 774, MUPG_Y1 + offsetY+108,
 					misc.format(tempConfig.difficulty_rating), 1 );
 			}
 

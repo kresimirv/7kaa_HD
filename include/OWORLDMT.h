@@ -32,6 +32,10 @@
 #include <ODYNARR.h>
 #endif
 
+#ifndef __OCONFIG_H
+#include <OCONFIG.h>
+#endif
+
 //-------- World matrix size ------------//
 
 #define MAX_WORLD_X_LOC  (World::max_x_loc)
@@ -45,8 +49,8 @@
 #define MAX_MAP_WIDTH	200
 #define MAX_MAP_HEIGHT	200
 
-#define MAP_X1          (588+(MAX_MAP_WIDTH-MAP_WIDTH)/2)
-#define MAP_Y1          (56 +(MAX_MAP_HEIGHT-MAP_HEIGHT)/2)
+#define MAP_X1          (ZOOM_WIDTH+10+(MAX_MAP_WIDTH-MAP_WIDTH)/2)
+#define MAP_Y1          (ZOOM_Y1+(MAX_MAP_HEIGHT-MAP_HEIGHT)/2)
 #define MAP_X2          (MAP_X1+MAP_WIDTH-1)
 #define MAP_Y2          (MAP_Y1+MAP_HEIGHT-1)
 
@@ -56,15 +60,20 @@
 #define MAP2_LOC_HEIGHT  2			// when MAP_VIEW_SECTION
 #define MAP2_LOC_WIDTH   2
 
+#define MAPMODE_X1       (VGA_WIDTH - 220)
+#define MAPMODE_Y1       3
+#define MAP_MODE_BUTTON_WIDTH 40
+
 //----------- Zoom window -------------//
 
 #define ZOOM_X1           0     // World Zoom Window
 #define ZOOM_Y1          56
-#define ZOOM_X2         575
-#define ZOOM_Y2         599
 
-#define ZOOM_WIDTH      576     // ZOOM_LOC_WIDTH(32)  * 18 = 576
-#define ZOOM_HEIGHT     544     // ZOOM_LOC_HEIGHT(32) * 17 = 544
+#define ZOOM_WIDTH      config.zoom_width
+#define ZOOM_HEIGHT     config.zoom_height
+
+#define ZOOM_X2         (ZOOM_X1 + ZOOM_WIDTH)
+#define ZOOM_Y2         (ZOOM_Y1 + ZOOM_HEIGHT)
 
 #define ZOOM_LOC_HEIGHT  32     // in world zoom window
 #define ZOOM_LOC_WIDTH   32
