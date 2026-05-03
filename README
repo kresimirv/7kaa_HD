@@ -1,55 +1,77 @@
-Seven Kingdoms: Ancient Adversaries - HD
-----------------------------------------
+# 7kaa_HD
 
-Release version 2.15.8
-Project website: www.7kfans.com
-Downloads and source repo: sourceforge.net/projects/skfans
-==> Please update your links to sourceforge <==
+HD resolution patch and UI fixes for **7kaa (Seven Kingdoms: Ancient Adversaries)** based on the latest official source.
 
-This is a GPL release of the Seven Kingdoms: Ancient Adversaries thanks to
-Enlight Software which granted the ability to license the game under a
-free and open source license in 2009. See the file "COPYING" for the
-details of the license. We are indebted to Enlight for making the 7kfans
-project possible and giving a new chance to build a community for fans
-of the game.
+## 📌 Overview
 
-About HD version
-----------------
+This repository is a modified version of the official **7kaa v2.15.8** (latest commit: 2026-04-04), enhanced with modern HD resolution support and several UI improvements.
 
-HD fix based on work from https://github.com/starportx/7kaa
+It builds upon prior HD work and refines it further with additional fixes and usability improvements.
 
-Additional fixes:
-- main menu - training - fixed text overlapping and scrollbar redraw on single click menu change
-- load/save screen - centered middle of the screen
-- resolution config is part of config.txt
+## ✨ Features
 
-To set desired resolution edit config.txt:
------------------------------------------
+### 🖥️ Supported Resolutions
 
-# game resolution - 1:800x600 2:1024x768 3:1920x1080
+* 800×600
+* 1024×768
+* 1280×1024
+* 1920×1080
+
+### 🛠️ Fixes & Improvements
+
+* **Main Menu → Training**
+
+  * Fixed text overlapping issues
+  * Fixed scrollbar redraw when switching menu options with a single click
+
+* **Load/Save Screen**
+
+  * Properly centered on screen across all supported resolutions
+
+* **Configuration**
+
+  * Resolution setting is now configurable via `config.txt`
+
+## ⚙️ Configuration
+
+The game resolution is controlled through the `config.txt` file.
+
+### 📍 Config File Locations
+
+**Linux**
+
+```
+/home/<your_user>/.local/share/7kfans.com/7kaa/
+```
+
+**Windows**
+
+```
+%appdata%/7kfans.com/7kaa/
+```
+
+### 🧾 Example `config.txt`
+
+```
+# game resolution - 0:800x600 1:1024x768 2:1280x1024 3:1920x1080
 resolution=1
+```
 
+## 🔧 Base Project
 
-System Requirements
----------
+This project is based on:
 
-Supported operating systems
-* Windows
-* Linux
+* Official 7kaa v2.15.8 source
+* Community HD improvements from earlier work (https://github.com/starportx/7kaa)
 
-Supported architectures for multiplayer
-* x86 compatible processor
+## 🚀 Purpose
 
+The goal of this repository is to modernize the original game experience by:
 
-Launching the game
----------
+* Enabling higher resolutions
+* Fixing UI issues that appear at larger screen sizes
+* Keeping changes minimal and compatible with the original codebase
 
-The game is run with the executable file 7kaa.exe or 7kaa. If you have used
-an installer, you may have a shortcut provided to launch the executable.
+## 📷 Notes
 
-The Linux package provided by the team is experimental and the libraries
-used are typically found on most distributions. If the game doesn't run,
-please report 7kfans forum and provide the name of the distribution to
-seek feedback on whether the game will work so we can track what
-distributions are supported.
-
+This is a lightweight enhancement project — no gameplay changes, only visual and usability improvements.
