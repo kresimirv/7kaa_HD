@@ -8,6 +8,11 @@ This repository is a modified version of the official **7kaa v2.15.8** (latest c
 
 It builds upon prior HD work and refines it further with additional fixes and usability improvements.
 
+## Screenshots
+
+![Main Menu](screenshots/main_menu.png)
+![Gameplay](screenshots/gameplay.png)
+
 ## ✨ Features
 
 ### 🖥️ Supported Resolutions
