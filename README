@@ -1,0 +1,39 @@
+Seven Kingdoms: Ancient Adversaries
+-----------------------------------
+
+Release version 2.15.8
+Project website: www.7kfans.com
+Downloads and source repo: sourceforge.net/projects/skfans
+==> Please update your links to sourceforge <==
+
+This is a GPL release of the Seven Kingdoms: Ancient Adversaries thanks to
+Enlight Software which granted the ability to license the game under a
+free and open source license in 2009. See the file "COPYING" for the
+details of the license. We are indebted to Enlight for making the 7kfans
+project possible and giving a new chance to build a community for fans
+of the game.
+
+
+System Requirements
+---------
+
+Supported operating systems
+* Windows
+* Linux
+
+Supported architectures for multiplayer
+* x86 compatible processor
+
+
+Launching the game
+---------
+
+The game is run with the executable file 7kaa.exe or 7kaa. If you have used
+an installer, you may have a shortcut provided to launch the executable.
+
+The Linux package provided by the team is experimental and the libraries
+used are typically found on most distributions. If the game doesn't run,
+please report 7kfans forum and provide the name of the distribution to
+seek feedback on whether the game will work so we can track what
+distributions are supported.
+
