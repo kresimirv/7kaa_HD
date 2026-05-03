@@ -88,15 +88,19 @@ void Config::init_resolution()
 
 	switch( resolution_type )
 	{
-		case RES_768:
+		case RES_1024_768:
 			win_width = 1024; win_height = 768;
 			zoom_width = 800; zoom_height = 704;
 			break;
-		case RES_1080:
+		case RES_1280_1024:
+			win_width = 1280; win_height = 1024;
+			zoom_width = 1056; zoom_height = 960;
+			break;
+		case RES_1920_1080:
 			win_width = 1920; win_height = 1080;
 			zoom_width = 1696; zoom_height = 1024;
 			break;
-		case RES_600:
+		case RES_800_600:
 		default:
 			win_width = 800; win_height = 600;
 			zoom_width = 576; zoom_height = 536;

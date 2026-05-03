@@ -521,7 +521,7 @@ int ConfigAdv::set(char *name, char *value)
 	{
 		if( !read_int(value, &resolution) )
 			return 0;
-		if( CHECK_BOUND(resolution, 0, 2) )
+		if( CHECK_BOUND(resolution, 0, 3) )
 			return 0;
 	}
 	else if( !strcmp(name, "rebel_think_town_action") )
