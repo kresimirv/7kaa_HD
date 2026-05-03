@@ -421,14 +421,17 @@ int Sys::init_objects()
    char* filename = "I_IF.RES";
    switch (config.resolution_type)
    {
-      case RES_600:
+      case RES_800_600:
          filename = "I_IF.RES";
          break;
-      case RES_768:
-         filename = "I_IF_hd2.RES";
+      case RES_1024_768:
+         filename = "I_IF_1024_768.RES";
          break;
-      case RES_1080:
-         filename = "I_IF_hd3.RES";
+      case RES_1280_1024:
+         filename = "I_IF_1280_1024.RES";
+         break;
+      case RES_1920_1080:
+         filename = "I_IF_1920_1080.RES";
          break;
       default:
          filename = "I_IF.RES";
