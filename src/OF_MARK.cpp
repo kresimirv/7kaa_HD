@@ -869,6 +869,8 @@ void FirmMarket::set_next_output_firm()
 		if( linked_firm_enable_array[next_output_link_id-1] == LINK_EE )
 		{
 			firmRecno = linked_firm_array[next_output_link_id-1];
+			if( firmRecno < 1 || firmRecno > firm_array.last_ele || firm_array.is_deleted(firmRecno) )
+				continue;
 			firmId 	 = firm_array[firmRecno]->firm_id;
 
 			if( firmId==FIRM_FACTORY )

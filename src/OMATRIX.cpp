@@ -319,6 +319,9 @@ int Matrix::valid_cur_box(int callRefresh)
 		if( top_x_loc + disp_x_loc > max_x_loc )
 			top_x_loc = max_x_loc - disp_x_loc;
 
+		if( top_x_loc < 0 )
+			top_x_loc = 0;
+
 		scrolledFlag=1;
 	}
 
@@ -332,6 +335,9 @@ int Matrix::valid_cur_box(int callRefresh)
 
 		if( top_y_loc + disp_y_loc > max_y_loc )
 			top_y_loc = max_y_loc - disp_y_loc;
+
+		if( top_y_loc < 0 )
+			top_y_loc = 0;
 
 		scrolledFlag=1;
 	}

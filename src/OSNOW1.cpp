@@ -41,8 +41,8 @@ void SnowLayer::set_bound(int x1, int y1, int x2, int y2)
 {
 	bound_x1 = x1;
 	bound_y1 = y1;
-	bound_x2 = x2;
-	bound_y2 = y2;
+	bound_x2 = std::min(x2, vga_back.buf_width() - 1);
+	bound_y2 = std::min(y2, vga_back.buf_height() - 1);
 }
 //---------- End of function SnowLayer::set_bound -----//
 

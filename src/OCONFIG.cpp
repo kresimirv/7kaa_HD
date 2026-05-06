@@ -103,7 +103,7 @@ void Config::init_resolution()
 		case RES_800_600:
 		default:
 			win_width = 800; win_height = 600;
-			zoom_width = 576; zoom_height = 536;
+			zoom_width = 576; zoom_height = 544;
 			break;
 	}
 
