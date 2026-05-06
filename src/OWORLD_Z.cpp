@@ -22,6 +22,7 @@
 //Description : Object ZoomMatrix
 
 #include <math.h>
+#include <algorithm>
 #include <OVGA.h>
 #include <OSYS.h>
 #include <OFONT.h>
@@ -328,8 +329,8 @@ void ZoomMatrix::draw()
 	Location* locPtr;
 	char*     nationColorArray = nation_array.nation_power_color_array;
 
-	int maxXLoc = top_x_loc + disp_x_loc;        // divide by 2 for world_info
-	int maxYLoc = top_y_loc + disp_y_loc;
+	int maxXLoc = std::min(top_x_loc + disp_x_loc, max_x_loc);
+	int maxYLoc = std::min(top_y_loc + disp_y_loc, max_y_loc);
 
 	dispPower = (world.map_matrix->map_mode == MAP_MODE_POWER &&
 					 world.map_matrix->power_mode ) ||
@@ -472,8 +473,8 @@ void ZoomMatrix::draw_white_site()
 	int       i=0, x, y, xLoc, yLoc;
 	Location* locPtr;
 
-	int maxXLoc = top_x_loc + disp_x_loc;        // divide by 2 for world_info
-	int maxYLoc = top_y_loc + disp_y_loc;
+	int maxXLoc = std::min(top_x_loc + disp_x_loc, max_x_loc);
+	int maxYLoc = std::min(top_y_loc + disp_y_loc, max_y_loc);
 
 	//------- draw occupied locations in whie ---------//
 
@@ -508,6 +509,10 @@ void ZoomMatrix::draw_frame()
 		blacken_unexplored();
 
 	disp_text();
+
+	// fill gap between zoom image bottom and screen bottom
+	if( image_y2 + 1 < VGA_HEIGHT )
+		vga_back.bar( image_x1, image_y2 + 1, image_x2, VGA_HEIGHT - 1, V_BLACK );
 }
 //----------- End of function ZoomMatrix::draw_frame ------------//
 
@@ -523,7 +528,7 @@ void ZoomMatrix::draw_weather_effects()
 		if(vibration == -1)
 		{
 			// start of an earthquake
-			vibration = weather.quake_rate(top_x_loc+disp_x_loc/2, top_y_loc+disp_y_loc/2)*16/100;
+			vibration = weather.quake_rate(std::min(top_x_loc+disp_x_loc/2, max_x_loc-1), std::min(top_y_loc+disp_y_loc/2, max_y_loc-1))*16/100;
 			if( config.sound_effect_flag && config.earthquake_audio)
 			{
 				RelVolume r(config.earthquake_volume,0);
@@ -552,7 +557,7 @@ void ZoomMatrix::draw_weather_effects()
 		}
 		else
 		{
-			vibration = weather.quake_rate(top_x_loc+disp_x_loc/2, top_y_loc+disp_y_loc/2)*16/100;
+		vibration = weather.quake_rate(std::min(top_x_loc+disp_x_loc/2, max_x_loc-1), std::min(top_y_loc+disp_y_loc/2, max_y_loc-1))*16/100;
 		}
 	}
 	else
@@ -1084,8 +1089,8 @@ void ZoomMatrix::blacken_unexplored()
 
 	int leftLoc = top_x_loc;
 	int topLoc = top_y_loc;
-	int rightLoc = leftLoc + disp_x_loc - 1;
-	int bottomLoc = topLoc + disp_y_loc - 1;
+	int rightLoc = std::min(leftLoc + disp_x_loc - 1, max_x_loc - 1);
+	int bottomLoc = std::min(topLoc + disp_y_loc - 1, max_y_loc - 1);
 	int scrnY, scrnX;		// screen coordinate
 	int x, y;				// x,y Location
 	Location *thisRowLoc, *northRowLoc, *southRowLoc;
@@ -1160,8 +1165,8 @@ void ZoomMatrix::blacken_fog_of_war()
 {
 	int leftLoc = top_x_loc;
 	int topLoc = top_y_loc;
-	int rightLoc = leftLoc + disp_x_loc - 1;
-	int bottomLoc = topLoc + disp_y_loc - 1;
+	int rightLoc = std::min(leftLoc + disp_x_loc - 1, max_x_loc - 1);
+	int bottomLoc = std::min(topLoc + disp_y_loc - 1, max_y_loc - 1);
 	int scrnY, scrnX;		// screen coordinate
 	int x, y;				// x,y Location
 	Location *thisRowLoc, *northRowLoc, *southRowLoc;
@@ -1286,8 +1291,8 @@ void ZoomMatrix::draw_objects()
   
 	int zoomXLoc1 = world.zoom_matrix->top_x_loc - DRAW_OUTSIDE;
 	int zoomYLoc1 = world.zoom_matrix->top_y_loc - DRAW_OUTSIDE;
-	int zoomXLoc2 = world.zoom_matrix->top_x_loc + world.zoom_matrix->disp_x_loc - 1 + DRAW_OUTSIDE;
-	int zoomYLoc2 = world.zoom_matrix->top_y_loc + world.zoom_matrix->disp_y_loc - 1 + DRAW_OUTSIDE;
+	int zoomXLoc2 = std::min(world.zoom_matrix->top_x_loc + world.zoom_matrix->disp_x_loc - 1 + DRAW_OUTSIDE, max_x_loc - 1);
+	int zoomYLoc2 = std::min(world.zoom_matrix->top_y_loc + world.zoom_matrix->disp_y_loc - 1 + DRAW_OUTSIDE, max_y_loc - 1);
 
 	if( zoomXLoc1 < 0)
 		zoomXLoc1 = 0;
