@@ -84,28 +84,14 @@ void Config::deinit()
 void Config::init_resolution()
 {
 	// get resolution from config file
-	resolution_type = config_adv.resolution;
+	win_width = config_adv.vga_resolution_width;
+	win_height = config_adv.vga_resolution_height;
 
-	switch( resolution_type )
-	{
-		case RES_1024_768:
-			win_width = 1024; win_height = 768;
-			zoom_width = 800; zoom_height = 704;
-			break;
-		case RES_1280_1024:
-			win_width = 1280; win_height = 1024;
-			zoom_width = 1056; zoom_height = 960;
-			break;
-		case RES_1920_1080:
-			win_width = 1920; win_height = 1080;
-			zoom_width = 1696; zoom_height = 1024;
-			break;
-		case RES_800_600:
-		default:
-			win_width = 800; win_height = 600;
-			zoom_width = 576; zoom_height = 544;
-			break;
-	}
+	// scale zoom area to fit remaining space after HUD bars
+	// top bar height = 56, right bar width = 224
+	// round to multiples of 32 (tile size) to prevent partial tile rendering
+	zoom_width = ((win_width - 224) / 32) * 32;
+	zoom_height = ((win_height - 56) / 32) * 32;
 
 	// recreate matrices since their sizes depend on ZOOM_WIDTH/ZOOM_HEIGHT
 	// which were evaluated to 0 during static initialization.
