@@ -51,6 +51,8 @@ public:
 	void  put_large(VgaBuf*,int,int,char*,int useStretch=0);  // put a large image, over 64K
 	void  put_large(VgaBuf*,int,int,int);
 
+	void  put_cropped_area(VgaBuf*, int desX, int desY, int desW, int desH, const char*, int srcX, int srcY, int srcW, int srcH);
+
 	void  put_to_buf(VgaBuf* vgaBufPtr, const char* imageName);
 	void  put_to_buf(VgaBuf* vgaBufPtr, int bitmapId);
 };

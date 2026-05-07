@@ -40,8 +40,6 @@ enum { OPTION_VERY_EASY, OPTION_EASY, OPTION_MEDIUM, OPTION_HARD, OPTION_VERY_HA
 
 enum { OPTION_DISPLAY_MAJOR_NEWS, OPTION_DISPLAY_ALL_NEWS };
 
-enum { RES_800_600, RES_1024_768, RES_1280_1024, RES_1920_1080 };
-
 //------------- Define constant -------------//
 
 enum { SMALL_STARTUP_RESOURCE  = 4000,
@@ -108,7 +106,6 @@ public:
 	short			start_up_independent_town;
 	short			start_up_raw_site;
 	char			difficulty_level;
-	char			resolution_type;
 
 	//-------- option settings  ---------//
 

@@ -122,10 +122,12 @@ void Game::main_menu()
 		{
 			mouse_cursor.set_icon(CURSOR_NORMAL);
 
-			int resSize;
-			File *resFile;
-			resFile = image_interface.get_file("M_MAIN", resSize);
-			image_interface.put_large(&vga_back, 0, 0, "M_MAIN",1);
+			// draw black background
+			vga_back.bar(0, 0, VGA_WIDTH-1, VGA_HEIGHT-1, 0);
+			// draw M_MAIN at original size (800x600), centered
+			int drawX = (VGA_WIDTH - 800) / 2;
+			int drawY = (VGA_HEIGHT - 600) / 2;
+			image_interface.put_large(&vga_back, drawX, drawY, (char*)"M_MAIN", 0);
 			vga_util.blt_buf(0,0,VGA_WIDTH-1,VGA_HEIGHT-1);	// blt the main menu screen from the back buffer to the front buffer
 
 			disp_version();
@@ -473,7 +475,12 @@ void Game::single_player_menu()
 
 		if( refreshFlag )
 		{
-			image_interface.put_large(&vga_back, 0, 0, "M_MAIN", 1);
+			// draw black background
+			vga_back.bar(0, 0, VGA_WIDTH-1, VGA_HEIGHT-1, 0);
+			// draw M_MAIN at original size (800x600), centered
+			int drawX = (VGA_WIDTH - 800) / 2;
+			int drawY = (VGA_HEIGHT - 600) / 2;
+			image_interface.put_large(&vga_back, drawX, drawY, (char*)"M_MAIN", 0);
 
 			vga_util.blt_buf(0,0,VGA_WIDTH-1, VGA_HEIGHT-1);
 
@@ -730,7 +737,12 @@ void Game::multi_player_menu(int lobbied, char *game_host)
 
 		if( refreshFlag )
 		{
-			image_interface.put_large(&vga_back, 0, 0, "M_MAIN", 1);
+			// draw black background
+			vga_back.bar(0, 0, VGA_WIDTH-1, VGA_HEIGHT-1, 0);
+			// draw M_MAIN at original size (800x600), centered
+			int drawX = (VGA_WIDTH - 800) / 2;
+			int drawY = (VGA_HEIGHT - 600) / 2;
+			image_interface.put_large(&vga_back, drawX, drawY, (char*)"M_MAIN", 0);
 
 			vga_util.blt_buf(0,0,VGA_WIDTH-1, VGA_HEIGHT-1);
 

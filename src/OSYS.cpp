@@ -418,25 +418,7 @@ int Sys::init_objects()
    image_icon.init(DIR_RES"I_ICON.RES",1,0);       // 1-read into buffer
 
    // determine correct resource file based on resolution
-   char* filename = "I_IF.RES";
-   switch (config.resolution_type)
-   {
-      case RES_800_600:
-         filename = "I_IF.RES";
-         break;
-      case RES_1024_768:
-         filename = "I_IF_1024_768.RES";
-         break;
-      case RES_1280_1024:
-         filename = "I_IF_1280_1024.RES";
-         break;
-      case RES_1920_1080:
-         filename = "I_IF_1920_1080.RES";
-         break;
-      default:
-         filename = "I_IF.RES";
-         break;
-   }
+    const char* filename = (config.win_width <= 800 && config.win_height <= 600) ? "I_IF.RES" : "I_IF_3840_2160.RES";
    char* pathpath = new char[100];
    strcpy(pathpath, DIR_RES);
    strcat(pathpath, filename);

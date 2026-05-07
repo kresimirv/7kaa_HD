@@ -264,7 +264,34 @@ void Info::next_day()
 //
 void Info::disp_panel()
 {
-	image_interface.put_large(&vga_back, 0, 0, "MAINSCR", 1);
+	// for 800x600 (default resolution), draw the original MAINSCR as is
+	if( config.win_width <= 800 && config.win_height <= 600 )
+	{
+		image_interface.put_large(&vga_back, 0, 0, "MAINSCR", 1);
+	}
+	else
+	{
+		// for higher resolutions, crop regions from I_IF_3840_2160.RES
+		int W = config.win_width;
+		int H = config.win_height;
+		int topBarH = 56;
+		int rightBarW = 224;
+		int bottomBorderH = 10;
+		int rightBarX = config.zoom_width;
+
+		// 1. draw top bar (stops at right bar start)
+		image_interface.put_cropped_area(&vga_back, 0, 0, rightBarX, topBarH, "MAINSCR", 0, 0, 3616, topBarH);
+
+		// 2. draw top-right corner
+		image_interface.put_cropped_area(&vga_back, rightBarX, 0, rightBarW, topBarH, "MAINSCR", 3616, 0, 224, topBarH);
+
+		// 3. draw right bar strip
+		int rightBarH = H - topBarH - bottomBorderH;
+		image_interface.put_cropped_area(&vga_back, rightBarX, topBarH, rightBarW, rightBarH, "MAINSCR", 3616, topBarH, 224, 2094);
+
+		// 4. draw bottom-right corner
+		image_interface.put_cropped_area(&vga_back, rightBarX, H - bottomBorderH, rightBarW, bottomBorderH, "MAINSCR", 3616, 2150, 224, bottomBorderH);
+	}
 
 	//------ keep a copy of bitmap of the panel texture -----//
 

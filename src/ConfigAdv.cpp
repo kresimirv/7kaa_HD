@@ -273,7 +273,8 @@ void ConfigAdv::reset()
 
 	game_file_patching = 1;
 
-	resolution = 0;
+	vga_resolution_width = 800;
+	vga_resolution_height = 600;
 
 	locale[0] = 0;
 
@@ -517,11 +518,18 @@ int ConfigAdv::set(char *name, char *value)
 			return 0;
 		}
 	}
-	else if( !strcmp(name, "resolution") )
+	else if( !strcmp(name, "vga_resolution_width") )
 	{
-		if( !read_int(value, &resolution) )
+		if( !read_int(value, &vga_resolution_width) )
 			return 0;
-		if( CHECK_BOUND(resolution, 0, 3) )
+		if( CHECK_BOUND(vga_resolution_width, 800, 3840) )
+			return 0;
+	}
+	else if( !strcmp(name, "vga_resolution_height") )
+	{
+		if( !read_int(value, &vga_resolution_height) )
+			return 0;
+		if( CHECK_BOUND(vga_resolution_height, 600, 2160) )
 			return 0;
 	}
 	else if( !strcmp(name, "rebel_think_town_action") )

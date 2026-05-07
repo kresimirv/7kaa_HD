@@ -27,6 +27,7 @@
 #include <OVGA.h>
 #include <OMOUSE.h>
 #include <OIMGRES.h>
+#include <SDL.h>
 
 
 //--------- Format of RES file ------------//
@@ -275,4 +276,67 @@ void ImageRes::put_to_buf(VgaBuf* vgaBufPtr, int bitmapId)
 	}
 }
 //---------- End of function ImageRes::put_to_buf --------//
+
+
+//-------- Start of function ImageRes::put_cropped_area --------//
+//
+// Copy a rectangular region from the image to the VGA buffer
+// at 1:1 pixel ratio with clipping.
+//
+// <VgaBuf*> vgaBuf      = target buffer
+// <int>     desX, desY  = destination location
+// <int>     desW, desH  = destination size
+// <char*>   imageName   = name of the image
+// <int>     srcX, srcY  = source location in original image
+// <int>     srcW, srcH  = source size
+//
+void ImageRes::put_cropped_area(VgaBuf* vgaBuf, int desX, int desY, int desW, int desH, const char* imageName, int srcX, int srcY, int srcW, int srcH)
+{
+	int dataSize;
+	File* resFile = ResourceIdx::get_file(imageName, dataSize);
+	if( !resFile )
+		return;
+
+	short origW = 0, origH = 0;
+	resFile->file_read(&origW, 2);
+	resFile->file_read(&origH, 2);
+
+	if( origW <= 0 || origH <= 0 )
+		return;
+
+	int fullSize = origW * origH;
+	char* fullBitmap = new char[fullSize];
+	resFile->file_read(fullBitmap, fullSize);
+
+	int bufPitch = vgaBuf->buf_pitch();
+	int bufWidth = vgaBuf->buf_width();
+	int bufHeight = vgaBuf->buf_height();
+
+	int copyW = desW;
+	if( copyW > srcW ) copyW = srcW;
+	int copyH = desH;
+	if( copyH > srcH ) copyH = srcH;
+
+	for( int y = 0; y < copyH; ++y )
+	{
+		int screenY = desY + y;
+		if( screenY < 0 || screenY >= bufHeight )
+			continue;
+
+		const char* srcRow = fullBitmap + (srcY + y) * origW;
+		char* destLine = vgaBuf->buf_ptr() + screenY * bufPitch;
+
+		for( int x = 0; x < copyW; ++x )
+		{
+			int screenX = desX + x;
+			if( screenX < 0 || screenX >= bufWidth )
+				continue;
+
+			destLine[screenX] = srcRow[srcX + x];
+		}
+	}
+
+	delete[] fullBitmap;
+}
+//---------- End of function ImageRes::put_cropped_area --------//
 

@@ -69,7 +69,8 @@ public:
 	char			game_file_patching;
 
 	// resolution settings
-	int			resolution;
+	int			vga_resolution_width;
+	int			vga_resolution_height;
 
 	// locale settings
 	char			locale[LOCALE_LEN+1];
