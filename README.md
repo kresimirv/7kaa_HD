@@ -101,6 +101,15 @@ git clean -dxf
 autoreconf -vif
 ./configure && make -j$(nproc)
 ```
+## 🎵 Game Music & Manual
+
+Original game music, manuals, and additional resources are available from the official Seven Kingdoms fan site:
+
+- Music packs
+- Game manuals
+- Additional downloads and resources
+
+https://7kfans.com/download/
 
 ## 🔧 Base Project
 
