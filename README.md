@@ -17,10 +17,25 @@ It builds upon prior HD work and refines it further with additional fixes and us
 
 ### 🖥️ Supported Resolutions
 
+The engine now supports **custom resolutions up to 3180×2160**.
+
+Example supported aspect ratios:
+
+#### 4:3
+
 * 800×600
 * 1024×768
+* 1600×1200
+
+#### 5:4
+
 * 1280×1024
+
+#### 16:9
+
+* 1280×720
 * 1920×1080
+* 2560×1440
 
 ### 🛠️ Fixes & Improvements
 
@@ -58,8 +73,33 @@ The game resolution is controlled through the `config.txt` file.
 ### 🧾 Example `config.txt`
 
 ```
-# game resolution - 0:800x600 1:1024x768 2:1280x1024 3:1920x1080
-resolution=1
+# custom game resolution
+vga_resolution_width=1280
+vga_resolution_height=1024
+```
+---
+
+## 📥 Cloning the Repository
+
+```bash
+git clone https://github.com/kresimirv/7kaa_HD.git
+```
+
+## 🐧 Linux Build Instructions
+
+### Required Build Tools
+
+* gcc / g++
+* make
+* autoconf
+* automake
+
+### Build
+
+```bash
+git clean -dxf
+autoreconf -vif
+./configure && make -j$(nproc)
 ```
 
 ## 🔧 Base Project
@@ -75,7 +115,8 @@ The goal of this repository is to modernize the original game experience by:
 
 * Enabling higher resolutions
 * Fixing UI issues that appear at larger screen sizes
-* Keeping changes minimal and compatible with the original codebase
+* Preserving original gameplay and compatibility
+* Keeping engine modifications lightweight and maintainable
 
 ## 📷 Notes
 
