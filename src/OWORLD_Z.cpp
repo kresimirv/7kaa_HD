@@ -63,6 +63,7 @@
 #include <OFIRMDIE.h>
 #include <OIMGRES.h>
 #include "gettext.h"
+#include <algorithm>
 
 //--------- Define static vars -----------//
 #define Lightning_bound_x1 (ZOOM_X1 + 4)

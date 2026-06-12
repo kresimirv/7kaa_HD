@@ -26,6 +26,7 @@
 #include <OVGABUF.h>
 #include <COLOR.h>
 #include <ALL.h>
+#include <algorithm>
 
 //---------- Define constant -------------//
 
