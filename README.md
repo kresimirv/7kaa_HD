@@ -8,6 +8,12 @@ This repository is a modified version of the official **7kaa v2.15.8** (latest c
 
 It builds upon prior HD work and refines it further with additional fixes and usability improvements.
 
+## 📦 Windows Install (Pre-built Release)
+
+Download the latest `Winx86_64` release from [https://github.com/kresimirv/7kaa_HD/releases](https://github.com/kresimirv/7kaa_HD/releases) and extract it.
+
+Edit `config.txt` in the game directory to set your desired resolution (see [Configuration](#%EF%B8%8F-configuration)).
+
 ## Screenshots
 
 ![Main Menu](screenshots/main_menu.png)
@@ -21,21 +27,21 @@ The engine now supports **custom resolutions up to 3180×2160**.
 
 Example supported aspect ratios:
 
-#### 4:3
+#### 16:9
 
-* 800×600
-* 1024×768
-* 1600×1200
+* 2560×1440
+* 1920×1080
+* 1280×720
 
 #### 5:4
 
 * 1280×1024
+  
+#### 4:3
 
-#### 16:9
-
-* 1280×720
-* 1920×1080
-* 2560×1440
+* 1600×1200
+* 1024×768
+* 800×600
 
 ### 🛠️ Fixes & Improvements
 
@@ -85,6 +91,46 @@ vga_resolution_height=1024
 git clone https://github.com/kresimirv/7kaa_HD.git
 ```
 
+## 🪟 Windows Build Instructions
+
+### Prerequisites
+
+- [MSYS2](https://www.msys2.org/) installed to default location (`C:\msys64`)
+- [GIT](https://git-scm.com/) installed
+
+### Setup
+
+From Start menu, find and run **MSYS2 MINGW64**.
+
+Update MSYS2 and install build tools and dependencies:
+```bash
+pacman -Syu
+```
+
+Close the terminal, reopen **MSYS2 MINGW64**, then:
+```bash
+pacman -Su mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 \
+  mingw-w64-x86_64-openal mingw-w64-x86_64-curl \
+  mingw-w64-x86_64-enet autoconf automake make libtool git
+```
+
+### Clone & Build
+
+In **MSYS2 MINGW64**:
+```bash
+cd /home/
+git clone https://github.com/kresimirv/7kaa_HD.git
+cd 7kaa_HD/
+./build-windows-msys2.sh
+```
+
+### Package for Distribution
+
+Create a folder `7kaaHD` and copy into it:
+- data & music folders (from original game)
+- `7kaa.exe` (from `C:\msys64\home\7kaa_HD\`)
+- Required DLLs (from `C:\msys64\mingw64\bin\`)
+
 ## 🐧 Linux Build Instructions
 
 ### Required Build Tools
@@ -101,6 +147,7 @@ git clean -dxf
 autoreconf -vif
 ./configure && make -j$(nproc)
 ```
+
 ## 🎵 Game Music & Manual
 
 Original game music, manuals, and additional resources are available from the official Seven Kingdoms fan site:
