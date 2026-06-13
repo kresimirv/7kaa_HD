@@ -24,6 +24,8 @@ chmod +x 7kaaHD_Linux_x86_64_*.AppImage
 ./7kaaHD_Linux_x86_64_*.AppImage
 ```
 
+Edit `config.txt` in `/home/<your_user>/.local/share/7kfans.com/7kaa/` (if folder or file doesn't exist, create them) to set your desired resolution (see [Configuration](#%EF%B8%8F-configuration)).
+
 No dependencies needed — everything is bundled inside the AppImage.
 
 ## Screenshots
