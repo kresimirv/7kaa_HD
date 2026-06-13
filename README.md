@@ -14,6 +14,18 @@ Download the latest `Winx86_64` release from [https://github.com/kresimirv/7kaa_
 
 Edit `config.txt` in the game directory to set your desired resolution (see [Configuration](#%EF%B8%8F-configuration)).
 
+## 📦 Linux Install (Pre-built Release)
+
+Download the latest `7kaaHD_Linux_x86_64_*.AppImage` from [Releases](https://github.com/kresimirv/7kaa_HD/releases).
+
+Make executable and run:
+```bash
+chmod +x 7kaaHD_Linux_x86_64_*.AppImage
+./7kaaHD_Linux_x86_64_*.AppImage
+```
+
+No dependencies needed — everything is bundled inside the AppImage.
+
 ## Screenshots
 
 ![Main Menu](screenshots/main_menu.png)
@@ -133,19 +145,43 @@ Create a folder `7kaaHD` and copy into it:
 
 ## 🐧 Linux Build Instructions
 
-### Required Build Tools
+### From Source
+
+#### Required Build Tools
 
 * gcc / g++
 * make
 * autoconf
 * automake
 
-### Build
+#### Build
 
 ```bash
 git clean -dxf
 autoreconf -vif
 ./configure && make -j$(nproc)
+```
+
+### AppImage
+
+Build a portable self-contained AppImage (no dependencies needed at runtime):
+
+**Debian/Ubuntu-based:**
+```bash
+sudo apt install build-essential autoconf automake libtool \
+  libsdl2-dev libopenal-dev libenet-dev libcurl4-openssl-dev \
+  patchelf squashfs-tools
+```
+
+**Arch-based:**
+```bash
+sudo pacman -S base-devel autoconf automake libtool sdl2 \
+  openal enet curl patchelf squashfs-tools
+```
+
+Then run:
+```bash
+./build-linux-appimage.sh
 ```
 
 ## 🎵 Game Music & Manual

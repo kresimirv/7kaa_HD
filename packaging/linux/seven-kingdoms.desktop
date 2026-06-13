@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Seven Kingdoms: Ancient Adversaries HD
+Comment=HD resolution patch for 7kaa - real-time strategy game
+Categories=Game;StrategyGame;
+Exec=7kaa
+Icon=seven-kingdoms
+Terminal=false
+Type=Application
