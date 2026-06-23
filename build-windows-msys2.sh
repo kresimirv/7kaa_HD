@@ -22,12 +22,12 @@ cat > $INC/config.h << 'EOF'
 #define REGISTER register
 EOF
 
-# Install locale files (copy compiled .gmo from po/ to locale/<lang>/LC_MESSAGES/7kaa.mo)
+# Install locale files (compile .po to .mo inside data/locale/<lang>/LC_MESSAGES/7kaa.mo)
 echo "Installing locale files..."
-for gmo in po/*.gmo; do
-  lang=$(basename "$gmo" .gmo)
-  mkdir -p "locale/$lang/LC_MESSAGES"
-  cp "$gmo" "locale/$lang/LC_MESSAGES/7kaa.mo"
+for po_file in po/*.po; do
+  lang=$(basename "$po_file" .po)
+  mkdir -p "data/locale/$lang/LC_MESSAGES"
+  msgfmt "$po_file" -o "data/locale/$lang/LC_MESSAGES/7kaa.mo"
 done
 
 # Build sub-libraries
