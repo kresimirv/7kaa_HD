@@ -22,6 +22,14 @@ cat > $INC/config.h << 'EOF'
 #define REGISTER register
 EOF
 
+# Install locale files (copy compiled .gmo from po/ to locale/<lang>/LC_MESSAGES/7kaa.mo)
+echo "Installing locale files..."
+for gmo in po/*.gmo; do
+  lang=$(basename "$gmo" .gmo)
+  mkdir -p "locale/$lang/LC_MESSAGES"
+  cp "$gmo" "locale/$lang/LC_MESSAGES/7kaa.mo"
+done
+
 # Build sub-libraries
 echo "Building sub-libraries..."
 g++ $CXXFLAGS $CPPFLAGS -c $SRC/openal/openal_audio.cpp -o $SRC/openal/openal_audio.o

@@ -140,8 +140,46 @@ void LocaleRes::load(const char *locale)
 			locale = "en_US";
 	}
 
-	setlocale(LC_ALL, locale); // for LC_MESSAGES and LC_CTYPE
+	if( !setlocale(LC_ALL, locale) )
+	{
+		char buf[100];
+		int len = strlen(locale);
+
+		// Try locale.UTF-8
+		snprintf(buf, sizeof(buf), "%s.UTF-8", locale);
+		if( setlocale(LC_ALL, buf) )
+			goto locale_ok;
+
+		// Try locale_LOCALE.UTF-8 (e.g. fr_FR.UTF-8)
+		if( len > 0 && len < 40 )
+		{
+			snprintf(buf, sizeof(buf), "%s_", locale);
+			for( int c=0 ; c<len ; c++ )
+				buf[len+1+c] = (locale[c] >= 'a' && locale[c] <= 'z') ? locale[c] - 32 : locale[c];
+			buf[len*2+1] = 0;
+			strncat(buf, ".UTF-8", sizeof(buf)-strlen(buf)-1);
+			if( setlocale(LC_ALL, buf) )
+				goto locale_ok;
+		}
+
+		// Try locale_LOCALE.utf8
+		if( len > 0 && len < 40 )
+		{
+			snprintf(buf, sizeof(buf), "%s_", locale);
+			for( int c=0 ; c<len ; c++ )
+				buf[len+1+c] = (locale[c] >= 'a' && locale[c] <= 'z') ? locale[c] - 32 : locale[c];
+			buf[len*2+1] = 0;
+			strncat(buf, ".utf8", sizeof(buf)-strlen(buf)-1);
+			setlocale(LC_ALL, buf);
+		}
+	}
+locale_ok:
 	setenv("LANGUAGE", locale, 1); // if setlocale is not supported
+
+	const char *locale_dir = get_locale_dir();
+	if( locale_dir )
+		bindtextdomain(PACKAGE, locale_dir);
+	textdomain(PACKAGE);
 
 	LocaleRec *localeRec;
 	String localeDbName;
@@ -171,7 +209,7 @@ void LocaleRes::load(const char *locale)
 	if( i >= locale_count )
 	{
 		strcpy(lang, "??");
-		strcpy(codeset, "UTF-8");
+		strcpy(codeset, "ISO-8859-1");
 	}
 
 	String tocode(codeset);

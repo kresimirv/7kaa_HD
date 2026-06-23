@@ -18,6 +18,14 @@ echo "==> Building $APP..."
 ./configure --disable-fhs
 make -j$(nproc)
 
+# Install locale files (copy compiled .gmo from po/ to locale/<lang>/LC_MESSAGES/7kaa.mo)
+echo "==> Installing locale files..."
+for gmo in po/*.gmo; do
+  lang=$(basename "$gmo" .gmo)
+  mkdir -p "locale/$lang/LC_MESSAGES"
+  cp "$gmo" "locale/$lang/LC_MESSAGES/7kaa.mo"
+done
+
 # Create AppDir structure
 echo "==> Creating AppDir..."
 rm -rf "$APPDIR"
@@ -32,6 +40,9 @@ cp src/$APP "$APPDIR/usr/bin/"
 
 # Copy data
 cp -r data/* "$APPDIR/usr/share/$APP/"
+
+# Copy locale files
+cp -r locale "$APPDIR/usr/share/$APP/"
 
 # Copy desktop file and icon
 cp packaging/linux/seven-kingdoms.desktop "$APPDIR/usr/share/applications/"
