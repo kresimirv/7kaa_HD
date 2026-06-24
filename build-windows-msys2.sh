@@ -6,7 +6,7 @@ INC=include
 
 CXXFLAGS="-std=c++11 -O2 -fsigned-char -mfpmath=387 -ffloat-store -fexcess-precision=fast -include $INC/config.h"
 CPPFLAGS="-I$INC -I/mingw64/include -I/mingw64/include/SDL2"
-LIBS="-L/mingw64/lib -lmingw32 -lSDL2main -lSDL2 -lopenal -lenet -lcurl -lole32 -lwinmm -lws2_32 -static-libstdc++ -static-libgcc -mwindows"
+LIBS="-L/mingw64/lib -lmingw32 -lSDL2main -lSDL2 -lopenal -lenet -lcurl -lintl -liconv -lole32 -lwinmm -lws2_32 -static-libstdc++ -static-libgcc -mwindows"
 
 # Generate config.h
 cat > $INC/config.h << 'EOF'
@@ -20,6 +20,10 @@ cat > $INC/config.h << 'EOF'
 #define OPENAL_AL_H <AL/al.h>
 #define OPENAL_ALC_H <AL/alc.h>
 #define REGISTER register
+#define PACKAGE "7kaa"
+#define PACKAGE_NAME "7kaa"
+#define ENABLE_NLS 1
+#define HAVE_LC_MESSAGES 1
 EOF
 
 # Install locale files (compile .po to .mo inside data/locale/<lang>/LC_MESSAGES/7kaa.mo)

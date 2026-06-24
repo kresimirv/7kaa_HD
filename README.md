@@ -125,7 +125,8 @@ Close the terminal, reopen **MSYS2 MINGW64**, then:
 ```bash
 pacman -Su mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 \
   mingw-w64-x86_64-openal mingw-w64-x86_64-curl \
-  mingw-w64-x86_64-enet autoconf automake make libtool git
+  mingw-w64-x86_64-enet mingw-w64-x86_64-gettext \
+  autoconf automake make libtool git
 ```
 
 ### Clone & Build

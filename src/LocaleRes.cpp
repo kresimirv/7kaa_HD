@@ -147,33 +147,28 @@ void LocaleRes::load(const char *locale)
 
 		// Try locale.UTF-8
 		snprintf(buf, sizeof(buf), "%s.UTF-8", locale);
-		if( setlocale(LC_ALL, buf) )
-			goto locale_ok;
-
-		// Try locale_LOCALE.UTF-8 (e.g. fr_FR.UTF-8)
-		if( len > 0 && len < 40 )
+		if( setlocale(LC_ALL, buf) ) { }
+		else if( len > 0 && len < 40 )
 		{
+			// Try locale_LOCALE.UTF-8 (e.g. fr_FR.UTF-8)
 			snprintf(buf, sizeof(buf), "%s_", locale);
 			for( int c=0 ; c<len ; c++ )
 				buf[len+1+c] = (locale[c] >= 'a' && locale[c] <= 'z') ? locale[c] - 32 : locale[c];
 			buf[len*2+1] = 0;
 			strncat(buf, ".UTF-8", sizeof(buf)-strlen(buf)-1);
-			if( setlocale(LC_ALL, buf) )
-				goto locale_ok;
-		}
-
-		// Try locale_LOCALE.utf8
-		if( len > 0 && len < 40 )
-		{
-			snprintf(buf, sizeof(buf), "%s_", locale);
-			for( int c=0 ; c<len ; c++ )
-				buf[len+1+c] = (locale[c] >= 'a' && locale[c] <= 'z') ? locale[c] - 32 : locale[c];
-			buf[len*2+1] = 0;
-			strncat(buf, ".utf8", sizeof(buf)-strlen(buf)-1);
-			setlocale(LC_ALL, buf);
+			if( setlocale(LC_ALL, buf) ) { }
+			else
+			{
+				// Try locale_LOCALE.utf8
+				snprintf(buf, sizeof(buf), "%s_", locale);
+				for( int c=0 ; c<len ; c++ )
+					buf[len+1+c] = (locale[c] >= 'a' && locale[c] <= 'z') ? locale[c] - 32 : locale[c];
+				buf[len*2+1] = 0;
+				strncat(buf, ".utf8", sizeof(buf)-strlen(buf)-1);
+				setlocale(LC_ALL, buf);
+			}
 		}
 	}
-locale_ok:
 	setenv("LANGUAGE", locale, 1); // if setlocale is not supported
 
 	const char *locale_dir = get_locale_dir();
@@ -212,16 +207,21 @@ locale_ok:
 		strcpy(codeset, "ISO-8859-1");
 	}
 
-	String tocode(codeset);
-	tocode += "//TRANSLIT";
-
 	if( cd != (iconv_t)-1 )
 		iconv_close(cd);
 	if( cd_latin != (iconv_t)-1 )
 		iconv_close(cd_latin);
+
+	String tocode(codeset);
+	tocode += "//TRANSLIT";
 	cd = iconv_open(tocode, "");
+	if( cd == (iconv_t)-1 )
+		cd = iconv_open(codeset, "");
+
 	cd_latin = iconv_open("UTF-8", "");
-	cd_from_sdl = iconv_open("ISO-8859-1//TRANSLIT//IGNORE", "UTF-8");
+	cd_from_sdl = iconv_open("ISO-8859-1//IGNORE", "UTF-8");
+	if( cd_from_sdl == (iconv_t)-1 )
+		cd_from_sdl = iconv_open("ISO-8859-1", "UTF-8");
 #endif
 }
 //------------- End of function LocaleRes::load ---------//
