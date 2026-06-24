@@ -99,12 +99,6 @@ vga_resolution_height=1024
 ```
 ---
 
-## 📥 Cloning the Repository
-
-```bash
-git clone https://github.com/kresimirv/7kaa_HD.git
-```
-
 ## 🪟 Windows Build Instructions
 
 ### Prerequisites
@@ -157,9 +151,11 @@ Create a folder `7kaaHD` and copy into it:
 * autoconf
 * automake
 
-#### Build
+#### Clone & Build
 
 ```bash
+git clone https://github.com/kresimirv/7kaa_HD.git
+cd 7kaa_HD/
 git clean -dxf
 autoreconf -vif
 ./configure && make -j$(nproc)
@@ -184,6 +180,8 @@ sudo pacman -S base-devel autoconf automake libtool sdl2 \
 
 Then run:
 ```bash
+git clone https://github.com/kresimirv/7kaa_HD.git
+cd 7kaa_HD/
 ./build-linux-appimage.sh
 ```
 
